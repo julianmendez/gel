@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src/main"/>
+	<classpathentry kind="src" path="src/conf"/>
+	<classpathentry kind="src" path="src/manifest"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="/de.tudresden.inf.lat.gel/lib/org.protege.editor/jars/org.protege.editor.core.application-4.1.jar"/>
+	<classpathentry kind="lib" path="/de.tudresden.inf.lat.gel/lib/org.protege.editor/jars/org.protege.editor.owl-4.1.jar"/>
+	<classpathentry kind="lib" path="/de.tudresden.inf.lat.gel/lib/de.tudresden.inf.lat.jcel.core/jars/de.tudresden.inf.lat.jcel.core-0.12.0.jar" sourcepath="/de.tudresden.inf.lat.jcel.core"/>
+	<classpathentry kind="lib" path="/de.tudresden.inf.lat.gel/lib/de.tudresden.inf.lat.jcel.owlapi/jars/de.tudresden.inf.lat.jcel.owlapi-0.12.0.jar" sourcepath="/de.tudresden.inf.lat.jcel.owlapi"/>
+	<classpathentry kind="lib" path="/de.tudresden.inf.lat.gel/lib/org.semanticweb.owlapi/jars/owlapi-bin-3.2.2.jar" sourcepath="/jcel-jars/lib/org.semanticweb.owlapi/jars/owlapi-src-3.2.2.jar"/>
+	<classpathentry kind="output" path="dist"/>
+</classpath>
