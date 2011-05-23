@@ -51,7 +51,9 @@ public class Minimizer {
 			for (IntegerClassExpression e1 : exprs) {
 				if (!newExprs.contains(e1)) continue;
 				for (IntegerClassExpression e2 : exprs) {
-					if (e1 != e2 && subConcept(e1, e2) && !(e1 instanceof IntegerObjectSomeValuesFrom && e2 instanceof IntegerClass)) newExprs.remove(e2);
+					if (e1 != e2 && subConcept(e1, e2) && !(e1 instanceof IntegerObjectSomeValuesFrom && e2 instanceof IntegerClass)) {
+						newExprs.remove(e2);
+					}
 				}
 			}
 			
@@ -113,12 +115,10 @@ public class Minimizer {
 				}
 			} else { 
 				// if e1 is a class and e2 an existential restriction for role r, test if any of the 
-				// classes in the completion set S(e1, r) are subconcepts of the inner class expression of e2
-				Set<IntegerClassExpression> n = new HashSet<IntegerClassExpression>();
+				// classes in the completion set S(e1, r) is a subconcept of the inner class expression of e2
 				for (Integer n1 : relation.get(isvf2.getProperty().getId()).getByFirst(((IntegerClass)e1).getId())) {
-					n.add(new IntegerClass(n1));
+					if (subConcept(new IntegerClass(n1), isvf2.getFiller())) return true;
 				}
-				return subConcept(new IntegerObjectIntersectionOf(n), isvf2.getFiller());
 			}
 			return false;
 		}
