@@ -5,9 +5,12 @@ import org.protege.editor.owl.ui.view.AbstractActiveOntologyViewComponent;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLObjectIntersectionOf;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.util.SimpleRenderer;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,12 +32,20 @@ public class LcsView extends AbstractActiveOntologyViewComponent implements Acti
 	protected void initialiseOntologyView() throws Exception {
 		setLayout(new BorderLayout());
 		
-		JPanel lcs = new JPanel(new BorderLayout());
-		lcs.setBorder(BorderFactory.createTitledBorder("Input concept descriptions"));
+		//JPanel lcs = new JPanel(new BorderLayout());
+		//lcs.setBorder(BorderFactory.createTitledBorder("Input concept descriptions"));
 		
 		Box lcsBox = Box.createVerticalBox();
-		lcsBox.setAlignmentX(0.0f);
-		lcsBox.setAlignmentY(0.0f);
+		lcsBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		lcsBox.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+		//lcsBox.setAlignmentY(0.0f);
+		
+		Box label = Box.createHorizontalBox();
+		label.add(new JLabel("Input concept descriptions"));
+		label.add(Box.createHorizontalGlue());
+		
+		lcsBox.add(label);
+		lcsBox.add(Box.createVerticalStrut(2));
 		
 		//lcsBox.add(new JLabel("Input concept descriptions"));
 		int num = 8;
@@ -44,7 +55,7 @@ public class LcsView extends AbstractActiveOntologyViewComponent implements Acti
 		for (int i=0; i<num; i++) {
 			expressions[i] = getOWLModelManager().getOWLDataFactory().getOWLThing();
 			Box field = Box.createHorizontalBox();
-			field.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+			field.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 			lcsInputCheckBoxes[i] = new JCheckBox("", i<2);
 			field.add(lcsInputCheckBoxes[i]);
 			field.add(Box.createHorizontalStrut(5));
@@ -54,27 +65,41 @@ public class LcsView extends AbstractActiveOntologyViewComponent implements Acti
 			JButton edit = new JButton("edit");
 			edit.setActionCommand("edit" + i);
 			edit.addActionListener(this);
+			field.add(Box.createHorizontalStrut(3));
 			field.add(edit);
 			lcsBox.add(field);
+			lcsBox.add(Box.createVerticalStrut(2));
 		}
 
+		lcsBox.add(Box.createVerticalStrut(3));
 		Box lcsDepthBox = Box.createHorizontalBox();
-		lcsDepthBox.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
-		lcsDepthBox.add(new JLabel("Depth"));
+		lcsDepthBox.add(new JLabel("Maximum Role-Depth"));
 		lcsDepthBox.add(Box.createHorizontalStrut(10));
 		lcsDepth = new JSpinner(new SpinnerNumberModel(5,0,100,1));
 		lcsDepthBox.add(lcsDepth);
 		lcsBox.add(lcsDepthBox);
+		lcsBox.add(Box.createVerticalStrut(3));
 		
 		lcsSimplifyCheckBox = new JCheckBox("Simplify result", true);
-		lcsBox.add(lcsSimplifyCheckBox);
-
-		// register button click
+		
 		JButton lcsButton = new JButton("Compute Lcs");
 		lcsButton.setActionCommand("lcs");
 		lcsButton.addActionListener(this);
-		lcsBox.add(lcsButton);
-		lcs.add(lcsBox, BorderLayout.CENTER);
+		
+		Box bottom = Box.createHorizontalBox();
+		bottom.add(lcsSimplifyCheckBox);
+		bottom.add(Box.createHorizontalGlue());
+		bottom.add(lcsButton);
+		
+		lcsBox.add(bottom);
+
+		
+		JScrollPane scrollPane = new JScrollPane(lcsBox);
+	    //scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+	    //scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		
+		//lcs.add(scrollPane, BorderLayout.CENTER);
 
 		/*
 		JPanel lcs1 = new JPanel(new BorderLayout());
@@ -90,7 +115,7 @@ public class LcsView extends AbstractActiveOntologyViewComponent implements Acti
 
 		lcs1.add(scrollPane, BorderLayout.CENTER);
 		*/
-		add(lcs, BorderLayout.CENTER);
+		add(scrollPane, BorderLayout.CENTER);
 		//add(lcs1, BorderLayout.CENTER);
 	}
 
