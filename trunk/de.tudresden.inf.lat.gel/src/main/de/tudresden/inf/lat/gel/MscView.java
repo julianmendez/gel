@@ -1,9 +1,6 @@
 package de.tudresden.inf.lat.gel;
 
 import java.awt.BorderLayout;
-import java.awt.Font;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Set;
@@ -15,9 +12,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
-import javax.swing.JTextArea;
 import javax.swing.SpinnerNumberModel;
 
 import org.protege.editor.owl.ui.view.AbstractActiveOntologyViewComponent;
@@ -39,49 +34,37 @@ public class MscView extends AbstractActiveOntologyViewComponent implements Acti
 	protected void initialiseOntologyView() throws Exception {
 		setLayout(new BorderLayout());
 		
-		//JPanel msc = new JPanel(new BorderLayout());
-		//msc.setBorder(BorderFactory.createTitledBorder("Most Specific Concept"));
+		JPanel msc = new JPanel(new BorderLayout());
+		msc.setBorder(BorderFactory.createTitledBorder("Most Specific Concept"));
 		
 		Box mscBox = Box.createVerticalBox();
-		mscBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-		mscBox.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+		mscBox.setAlignmentX(0);
 		
 		Box indivBox = Box.createHorizontalBox();
+		indivBox.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
 		indivBox.add(new JLabel("Individual"));
 		indivBox.add(Box.createHorizontalStrut(10));
 		mscIndividualComboBox = new JComboBox();
 		initIndividuals();
 		indivBox.add(mscIndividualComboBox);
-		indivBox.setMaximumSize(new Dimension((int)indivBox.getMaximumSize().getWidth(), (int)indivBox.getPreferredSize().getHeight()));
 		mscBox.add(indivBox);
-		mscBox.add(Box.createVerticalStrut(5));
 
 		Box mscDepthBox = Box.createHorizontalBox();
-		mscDepthBox.add(new JLabel("Maximum Role-Depth"));
+		mscDepthBox.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+		mscDepthBox.add(new JLabel("Depth"));
 		mscDepthBox.add(Box.createHorizontalStrut(10));
 		mscDepth = new JSpinner(new SpinnerNumberModel(5,0,100,1));
 		mscDepthBox.add(mscDepth);
-		mscDepthBox.setMaximumSize(new Dimension((int)mscDepthBox.getMaximumSize().getWidth(), (int)mscDepthBox.getPreferredSize().getHeight()));
 		mscBox.add(mscDepthBox);
-		mscBox.add(Box.createVerticalStrut(2));
-		
+
 		mscSimplifyCheckBox = new JCheckBox("Simplify result", true);
+		mscBox.add(mscSimplifyCheckBox);
 		
+		// register button click
 		JButton mscButton = new JButton("Compute Msc");
 		mscButton.setActionCommand("msc");
 		mscButton.addActionListener(this);
-		
-		Box bottom = Box.createHorizontalBox();
-		bottom.add(mscSimplifyCheckBox);
-		bottom.add(Box.createHorizontalGlue());
-		bottom.add(mscButton);
-		// register button click
-		mscBox.add(bottom);
-		
-		JScrollPane scrollPane = new JScrollPane(mscBox);
-	    //scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-	    //scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		mscBox.add(mscButton);
 		
 		/*
 		mscResult = new JTextArea(100, 10);
@@ -95,14 +78,14 @@ public class MscView extends AbstractActiveOntologyViewComponent implements Acti
 		mscBox.add(scrollPane);
 		*/
 		
-		//msc.add(scrollPane, BorderLayout.CENTER);
-		add(scrollPane, BorderLayout.CENTER);
+		msc.add(mscBox, BorderLayout.CENTER);
+		add(msc, BorderLayout.CENTER);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// button click - compute msc
-		if ("msc".equals(e.getActionCommand()) && mscIndividualComboBox.getSelectedIndex() >= 0) {
+		if ("msc".equals(e.getActionCommand())) {
 			GelReasoner r = new GelReasoner(super.getOWLModelManager().getActiveOntology());
 			OWLClassExpression msc = r.ComputeMsc((Integer)mscDepth.getValue(), individuals[mscIndividualComboBox.getSelectedIndex()], mscSimplifyCheckBox.isSelected());
 			ClassExpressionEditor cee = new ClassExpressionEditor(getOWLWorkspace());

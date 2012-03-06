@@ -6,12 +6,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import de.tudresden.inf.lat.jcel.core.axiom.complex.ComplexIntegerAxiom;
-import de.tudresden.inf.lat.jcel.core.datatype.IntegerClass;
-import de.tudresden.inf.lat.jcel.core.datatype.IntegerClassExpression;
-import de.tudresden.inf.lat.jcel.core.datatype.IntegerObjectIntersectionOf;
-import de.tudresden.inf.lat.jcel.core.datatype.IntegerObjectProperty;
-import de.tudresden.inf.lat.jcel.core.datatype.IntegerObjectSomeValuesFrom;
+import de.tudresden.inf.lat.jcel.ontology.axiom.complex.ComplexIntegerAxiom;
+import de.tudresden.inf.lat.jcel.ontology.axiom.extension.IntegerOntologyObjectFactory;
+import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerClassExpression;
+import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerEntityManager;
 import de.tudresden.inf.lat.jcel.core.graph.IntegerBinaryRelation;
 
 /**
@@ -25,6 +23,7 @@ public class MscProcessor extends de.tudresden.inf.lat.jcel.core.algorithm.cel.C
 	private int individual;
 	private IntegerClassExpression msc = null;
 	private boolean simplify;
+	private IntegerOntologyObjectFactory factory;
 
 	/**
 	 * Creates a new MscProcessor that will compute the most specific concept of the provided input individual for the given set of axioms.
@@ -32,11 +31,12 @@ public class MscProcessor extends de.tudresden.inf.lat.jcel.core.algorithm.cel.C
 	 * @param individual individual ID
 	 * @param k role-depth bound
 	 */
-	public MscProcessor(Set<ComplexIntegerAxiom> axioms, int individual, int k, boolean simplify) {
-		super(axioms);
+	public MscProcessor(Set<ComplexIntegerAxiom> axioms, int individual, int k, boolean simplify, IntegerOntologyObjectFactory factory) {
+		super(axioms, factory);
 		this.individual = individual;
 		this.k = k;
 		this.simplify = simplify;
+		this.factory = factory;
 	}
 
 	/**
@@ -44,7 +44,7 @@ public class MscProcessor extends de.tudresden.inf.lat.jcel.core.algorithm.cel.C
 	 */
 	protected void postProcess() {
 		// create a new minimizer
-		Minimizer m = new Minimizer(this.getIdGenerator(), this.getClassGraph(), this.getObjectPropertyGraph(), this.getRelation());
+		Minimizer m = new Minimizer(this.getIdGenerator(), this.getClassGraph(), this.getObjectPropertyGraph(), this.getRelation(), this.getExtendedOntology(), factory);
 		
 		// get ID of the nominal that represents the individual
 		int i = super.getIdGenerator().getAuxiliaryNominal(individual);
@@ -77,7 +77,7 @@ public class MscProcessor extends de.tudresden.inf.lat.jcel.core.algorithm.cel.C
 		for (Integer i : commonNames) {
 			// test that we don't have a nominal - but that should not happen
 			if (!super.getIdGenerator().getAuxiliaryNominals().contains(i)) {
-				intersectionSet.add(new IntegerClass(i));
+				intersectionSet.add(factory.getDataTypeFactory().createClass(i));
 			}
 		}
 		if (k==0) {
@@ -85,14 +85,14 @@ public class MscProcessor extends de.tudresden.inf.lat.jcel.core.algorithm.cel.C
 			if (intersectionSet.size() == 1) {
 				return intersectionSet.iterator().next();
 			}
-			return new IntegerObjectIntersectionOf(intersectionSet);
+			return factory.getDataTypeFactory().createObjectIntersectionOf(intersectionSet);
 		} else {
 			// otherwise traverse all r-successors and add existentially restriction for the recursively computed concepts descriptions to the intersection set
 			for (Integer relation : super.getRelationIdSet()) {
-				if (relation > super.getIdGenerator().getFirstObjectPropertyId() || relation < 2) continue;
+				if (super.getIdGenerator().isAuxiliary(relation) || relation < IntegerEntityManager.firstUsableIdentifier) continue;
 				for (int i : super.getRelation(relation).getByFirst(ind)) {
 					//if (k == this.k && i != ind) {
-					intersectionSet.add(new IntegerObjectSomeValuesFrom(new IntegerObjectProperty(relation), kMscRecursive(i, k-1)));
+					intersectionSet.add(factory.getDataTypeFactory().createObjectSomeValuesFrom(factory.getDataTypeFactory().createObjectProperty(relation), kMscRecursive(i, k-1)));
 					//}
 				}
 			}
@@ -100,7 +100,7 @@ public class MscProcessor extends de.tudresden.inf.lat.jcel.core.algorithm.cel.C
 			if (intersectionSet.size() == 1) {
 				return intersectionSet.iterator().next();
 			} else {
-				return new IntegerObjectIntersectionOf(intersectionSet);
+				return factory.getDataTypeFactory().createObjectIntersectionOf(intersectionSet);
 			}
 		}
 	}
@@ -116,7 +116,7 @@ public class MscProcessor extends de.tudresden.inf.lat.jcel.core.algorithm.cel.C
 	private Map<Integer, IntegerBinaryRelation> getRelation() {
 		Map<Integer, IntegerBinaryRelation> m = new TreeMap<Integer, IntegerBinaryRelation>();
 		for (Integer relation : super.getRelationIdSet()) {
-			if (relation > super.getIdGenerator().getFirstObjectPropertyId() || relation < 2) continue;
+			if (super.getIdGenerator().isAuxiliary(relation) || relation < IntegerEntityManager.firstUsableIdentifier) continue;
 				m.put(relation, super.getRelation(relation));
 		}
 		return m;
