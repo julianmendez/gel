@@ -5,118 +5,91 @@ import org.protege.editor.owl.ui.view.AbstractActiveOntologyViewComponent;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLObjectIntersectionOf;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLObjectSomeValuesFrom;
 import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.util.SimpleRenderer;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.ArrayList;
 import javax.swing.*;
 
 public class LcsView extends AbstractActiveOntologyViewComponent implements ActionListener {
 	private static final long serialVersionUID = 4052074502148410361L;
 	
-	private JCheckBox[] lcsInputCheckBoxes;
-	private JTextField[] lcsInputTextFields;
-	private OWLClassExpression[] expressions;
 	private JSpinner lcsDepth;
-	//private JTextArea lcsResult;
 	private JCheckBox lcsSimplifyCheckBox;
-
+	private JCheckBox lcsOpti1CheckBox;
+	private JCheckBox lcsOpti2CheckBox;
+	private JButton addField;
+	private Box inputBox;
+	
+	List<JCheckBox> inputCheckBoxes = new ArrayList<JCheckBox>();
+	List<JTextField> inputTextFields = new ArrayList<JTextField>();
+	List<OWLClassExpression> inputConcepts = new ArrayList<OWLClassExpression>();
+	
+	private Box createField() {
+		int i = inputConcepts.size();
+		inputConcepts.add(getOWLModelManager().getOWLDataFactory().getOWLThing());
+		Box field = Box.createHorizontalBox();
+		field.setBorder(BorderFactory.createEmptyBorder(0, 10, 3, 10));
+		inputCheckBoxes.add(new JCheckBox("", true));
+		field.add(inputCheckBoxes.get(i));
+		field.add(Box.createRigidArea(new Dimension(5, 0)));
+		inputTextFields.add(new JTextField(render(inputConcepts.get(i)), 10));
+		inputTextFields.get(i).setEditable(false);
+		field.add(inputTextFields.get(i));
+		field.add(Box.createRigidArea(new Dimension(5, 0)));
+		JButton edit = new JButton("edit");
+		edit.setActionCommand("edit" + i);
+		edit.addActionListener(this);
+		field.add(edit);
+		return field;
+	}
+	
 	// create the window layout
 	@Override
 	protected void initialiseOntologyView() throws Exception {
 		setLayout(new BorderLayout());
 		
-		//JPanel lcs = new JPanel(new BorderLayout());
-		//lcs.setBorder(BorderFactory.createTitledBorder("Input concept descriptions"));
-		
-		Box lcsBox = Box.createVerticalBox();
-		lcsBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-		lcsBox.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-		//lcsBox.setAlignmentY(0.0f);
-		
-		Box label = Box.createHorizontalBox();
-		label.add(new JLabel("Input concept descriptions"));
-		label.add(Box.createHorizontalGlue());
-		
-		lcsBox.add(label);
-		lcsBox.add(Box.createVerticalStrut(2));
-		
-		//lcsBox.add(new JLabel("Input concept descriptions"));
-		int num = 8;
-		lcsInputCheckBoxes = new JCheckBox[num];
-		lcsInputTextFields = new JTextField[num];
-		expressions = new OWLClassExpression[num];
-		for (int i=0; i<num; i++) {
-			expressions[i] = getOWLModelManager().getOWLDataFactory().getOWLThing();
-			Box field = Box.createHorizontalBox();
-			field.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-			lcsInputCheckBoxes[i] = new JCheckBox("", i<2);
-			field.add(lcsInputCheckBoxes[i]);
-			field.add(Box.createHorizontalStrut(5));
-			lcsInputTextFields[i] = new JTextField(render(expressions[i]));//(i<2) ? "Thing" : "");
-			lcsInputTextFields[i].setEditable(false);
-			field.add(lcsInputTextFields[i]);
-			JButton edit = new JButton("edit");
-			edit.setActionCommand("edit" + i);
-			edit.addActionListener(this);
-			field.add(Box.createHorizontalStrut(3));
-			field.add(edit);
-			lcsBox.add(field);
-			lcsBox.add(Box.createVerticalStrut(2));
-		}
+		JPanel inputPanel = new JPanel(new BorderLayout());
+		inputBox = Box.createVerticalBox();
+		//create input fields
+		inputBox.add(createField());
+		inputBox.add(createField());
+		addField = new JButton("more");
+		addField.setActionCommand("add");
+		addField.addActionListener(this);
+		inputBox.add(addField);
+		inputPanel.add(inputBox, BorderLayout.NORTH);
+		JScrollPane inputList = new JScrollPane(inputPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		inputList.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "Input concept descriptions"));
 
-		lcsBox.add(Box.createVerticalStrut(3));
-		Box lcsDepthBox = Box.createHorizontalBox();
-		lcsDepthBox.add(new JLabel("Maximum Role-Depth"));
-		lcsDepthBox.add(Box.createHorizontalStrut(10));
+		Box optionsBox = Box.createVerticalBox();
+		optionsBox.setAlignmentX(0.0f);
+		optionsBox.setAlignmentY(0.0f);
+		Box depthBox = Box.createHorizontalBox();
+		depthBox.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 10));
+		depthBox.add(new JLabel("Depth"));
+		depthBox.add(Box.createHorizontalStrut(5));
 		lcsDepth = new JSpinner(new SpinnerNumberModel(5,0,100,1));
-		lcsDepthBox.add(lcsDepth);
-		lcsBox.add(lcsDepthBox);
-		lcsBox.add(Box.createVerticalStrut(3));
-		
+		((JSpinner.DefaultEditor)lcsDepth.getEditor()).getTextField().setColumns(3);
+		depthBox.add(lcsDepth);
+		optionsBox.add(depthBox);
 		lcsSimplifyCheckBox = new JCheckBox("Simplify result", true);
-		
+		lcsOpti1CheckBox = new JCheckBox("Optimization 1", true);
+		lcsOpti2CheckBox = new JCheckBox("Optimization 2", false);
+		optionsBox.add(lcsSimplifyCheckBox);
+		optionsBox.add(lcsOpti1CheckBox);
+		optionsBox.add(lcsOpti2CheckBox);
 		JButton lcsButton = new JButton("Compute Lcs");
 		lcsButton.setActionCommand("lcs");
 		lcsButton.addActionListener(this);
-		
-		Box bottom = Box.createHorizontalBox();
-		bottom.add(lcsSimplifyCheckBox);
-		bottom.add(Box.createHorizontalGlue());
-		bottom.add(lcsButton);
-		
-		lcsBox.add(bottom);
+		optionsBox.add(lcsButton);
 
-		
-		JScrollPane scrollPane = new JScrollPane(lcsBox);
-	    //scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-	    //scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setBorder(BorderFactory.createEmptyBorder());
-		
-		//lcs.add(scrollPane, BorderLayout.CENTER);
-
-		/*
-		JPanel lcs1 = new JPanel(new BorderLayout());
-		lcs1.setBorder(BorderFactory.createTitledBorder("Least Common Subsumer Result"));
-
-		lcsResult = new JTextArea(100, 10);
-		//lcsResult.setEditable(false);
-		lcsResult.setLineWrap(true);
-		lcsResult.setFont(new Font("Default", Font.PLAIN, 12));
-	    JScrollPane scrollPane = new JScrollPane(lcsResult);
-	    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-	    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-
-		lcs1.add(scrollPane, BorderLayout.CENTER);
-		*/
-		add(scrollPane, BorderLayout.CENTER);
-		//add(lcs1, BorderLayout.CENTER);
+		add(inputList, BorderLayout.CENTER);
+		add(optionsBox, BorderLayout.SOUTH);
 	}
 
 	@Override
@@ -131,26 +104,32 @@ public class LcsView extends AbstractActiveOntologyViewComponent implements Acti
 					s.add(lcsInputTextFields[i].getText());
 			}*/
 			ArrayList<OWLClassExpression> concepts = new ArrayList<OWLClassExpression>();
-			for (int i=0; i<8; i++) {
-				if (lcsInputCheckBoxes[i].isSelected()) {
-					concepts.add(expressions[i]);
+			for (int i=0; i<inputConcepts.size(); i++) {
+				if (inputCheckBoxes.get(i).isSelected()) {
+					concepts.add(inputConcepts.get(i));
 				}
 			}
 			if (concepts.size()>=2) {
 				// if there are at least two, compute the lcs
 				OWLClassExpression[] n = new OWLClassExpression[concepts.size()];
 				n = concepts.toArray(n);
-				OWLClassExpression result = r.ComputeLcs((Integer)lcsDepth.getValue(), n, lcsSimplifyCheckBox.isSelected());
+				OWLClassExpression result = r.ComputeLcs((Integer)lcsDepth.getValue(), n, lcsSimplifyCheckBox.isSelected(), lcsOpti1CheckBox.isSelected(), lcsOpti2CheckBox.isSelected());
 				ClassExpressionEditor cee = new ClassExpressionEditor(getOWLWorkspace());
 				cee.showDialog(result);
 			} else {
+				System.out.println("Nope");
 				//lcsResult.setText("Can't compute the lcs for less than 2 concepts");
 			}
 		} else if (e.getActionCommand().startsWith("edit")) {
 			int num = Integer.parseInt(e.getActionCommand().substring(4));
 			ClassExpressionEditor cee = new ClassExpressionEditor(getOWLWorkspace());
-			expressions[num] = cee.showDialog(expressions[num]);
-			lcsInputTextFields[num].setText(render(expressions[num])); //expressions[num].toString());
+			inputConcepts.set(num, cee.showDialog(inputConcepts.get(num)));
+			inputTextFields.get(num).setText(render(inputConcepts.get(num)));
+		} else if ("add".equals(e.getActionCommand())) {
+			inputBox.remove(addField);
+			inputBox.add(createField());
+			inputBox.add(addField);
+			this.validate();
 		}
 	}
 	

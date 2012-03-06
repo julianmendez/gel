@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: nonstdinference
+Bundle-Name: gel
 Main-Class: de.tudresden.inf.lat.gel.GelReasoner
 Bundle-SymbolicName: de.tudresden.inf.lat.gel;singleton:=true
 Bundle-Category: protege
@@ -8,13 +8,14 @@ Bundle-Description: non-standard inference view for protege
 Bundle-Vendor: Chair for Automata Theory - TU Dresden
 Bundle-DocURL: http://lat.inf.tu-dresden.de
 Bundle-ClassPath: .,
- lib/de.tudresden.inf.lat.jcel.core/jars/de.tudresden.inf.lat.jcel.core-0.12.0.jar,
- lib/de.tudresden.inf.lat.jcel.owlapi/jars/de.tudresden.inf.lat.jcel.owlapi-0.12.0.jar,
+ lib/jcel.core/jcel.core-0.16.0.jar,
+ lib/jcel.owlapi/jcel.owlapi-0.16.0.jar,
+ lib/jcel.ontology/jcel.ontology-0.16.0.jar,
 Import-Package: org.osgi.framework,
  org.apache.log4j,
  javax.swing,
  javax.swing.border
-Bundle-Version: 0.1.0
+Bundle-Version: 0.16.0
 Bundle-Activator: org.protege.editor.core.plugin.DefaultPluginActivator
 Require-Bundle: org.eclipse.equinox.registry,
  org.eclipse.equinox.common,

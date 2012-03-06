@@ -1,16 +1,22 @@
 package de.tudresden.inf.lat.gel;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import de.tudresden.inf.lat.jcel.core.datatype.IntegerClass;
-import de.tudresden.inf.lat.jcel.core.datatype.IntegerClassExpression;
-import de.tudresden.inf.lat.jcel.core.datatype.IntegerObjectIntersectionOf;
-import de.tudresden.inf.lat.jcel.core.datatype.IntegerObjectSomeValuesFrom;
+import de.tudresden.inf.lat.jcel.core.algorithm.cel.CelExtendedOntology;
+import de.tudresden.inf.lat.jcel.ontology.axiom.extension.IntegerOntologyObjectFactory;
+import de.tudresden.inf.lat.jcel.ontology.axiom.normalized.RI3Axiom;
+import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerClass;
+import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerClassExpression;
+import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerEntityManager;
+import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerObjectIntersectionOf;
+import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerObjectProperty;
+import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerObjectSomeValuesFrom;
 import de.tudresden.inf.lat.jcel.core.graph.IntegerBinaryRelation;
 import de.tudresden.inf.lat.jcel.core.graph.IntegerSubsumerGraph;
-import de.tudresden.inf.lat.jcel.core.normalization.IdGenerator;
 
 /**
  * Class that can simplify concept descriptions.
@@ -21,7 +27,9 @@ public class Minimizer {
 	private IntegerSubsumerGraph classGraph;
 	private IntegerSubsumerGraph objectPropertyGraph;
 	private Map<Integer, IntegerBinaryRelation> relation;
-	private IdGenerator idGen;
+	private CelExtendedOntology ontology;
+	private IntegerEntityManager idGen;
+	private IntegerOntologyObjectFactory factory;
 	
 	/**
 	 * Create a new minimizer.
@@ -29,11 +37,13 @@ public class Minimizer {
 	 * @param classGraph class graph (completion sets S(C))
 	 * @param relation maps each relation ID to the corresponding relation object
 	 */
-	public Minimizer(IdGenerator idGen, IntegerSubsumerGraph classGraph, IntegerSubsumerGraph objectPropertyGraph, Map<Integer, IntegerBinaryRelation> relation) {
+	public Minimizer(IntegerEntityManager idGen, IntegerSubsumerGraph classGraph, IntegerSubsumerGraph objectPropertyGraph, Map<Integer, IntegerBinaryRelation> relation, CelExtendedOntology ontology, IntegerOntologyObjectFactory factory) {
 		this.classGraph = classGraph;
 		this.objectPropertyGraph = objectPropertyGraph;
 		this.relation = relation;
 		this.idGen = idGen;
+		this.ontology = ontology;
+		this.factory = factory;
 	}
 
 	/**
@@ -64,11 +74,11 @@ public class Minimizer {
 			}
 			
 			// return the conjunction of the minimized expressions
-			return new IntegerObjectIntersectionOf(newExprs2);
+			return factory.getDataTypeFactory().createObjectIntersectionOf(newExprs2);
 		} else if (expression instanceof IntegerObjectSomeValuesFrom) {
 			// if the expression is an existential restriction, minimize the inner class expression
 			IntegerObjectSomeValuesFrom l = (IntegerObjectSomeValuesFrom)expression;
-			return new IntegerObjectSomeValuesFrom(l.getProperty(), minimize(l.getFiller()));
+			return factory.getDataTypeFactory().createObjectSomeValuesFrom(l.getProperty(), minimize(l.getFiller()));
 		} else {
 			// if the expression is a concept name, there is nothing to minimize
 			return expression;
@@ -107,7 +117,18 @@ public class Minimizer {
 				// if both concepts are existential restrictions, test the inner class expressions for subsumption
 				IntegerObjectSomeValuesFrom isvf1 = (IntegerObjectSomeValuesFrom)e1;
 				//return isvf1.getProperty().getId().equals(isvf2.getProperty().getId()) && subConcept(isvf1.getFiller(), isvf2.getFiller());
-				return objectPropertyGraph.getSubsumers(isvf1.getProperty().getId()).contains(isvf2.getProperty().getId()) && subConcept(isvf1.getFiller(), isvf2.getFiller());
+				if (objectPropertyGraph.getSubsumers(((IntegerObjectProperty) isvf1.getProperty()).getId()).contains(((IntegerObjectProperty) isvf2.getProperty()).getId()) && subConcept(isvf1.getFiller(), isvf2.getFiller())) {
+					return true;
+				}
+				
+				for (RI3Axiom ri3 : ontology.getSubPropertyAxiomSetByLeft(((IntegerObjectProperty) isvf1.getProperty()).getId())) {
+					if (objectPropertyGraph.getSubsumers(ri3.getSuperProperty()).contains(((IntegerObjectProperty) isvf2.getProperty()).getId())) {
+						for (IntegerObjectSomeValuesFrom eth : findExistentialRestrictions(ri3.getRightSubProperty(), isvf1.getFiller())) {
+							if (subConcept(eth.getFiller(), isvf2.getFiller())) return true;
+						}
+					}
+				}
+				return false;
 			} else if (e1 instanceof IntegerObjectIntersectionOf) {
 				// if the e1 is a conjunction, at least one of its conjuncts must be a subconcept of e2
 				for (IntegerClassExpression e : ((IntegerObjectIntersectionOf)e1).getOperands()) {
@@ -116,12 +137,27 @@ public class Minimizer {
 			} else { 
 				// if e1 is a class and e2 an existential restriction for role r, test if any of the 
 				// classes in the completion set S(e1, r) is a subconcept of the inner class expression of e2
-				for (Integer n1 : relation.get(isvf2.getProperty().getId()).getByFirst(((IntegerClass)e1).getId())) {
-					if (subConcept(new IntegerClass(n1), isvf2.getFiller())) return true;
+				for (Integer n1 : relation.get(((IntegerObjectProperty) isvf2.getProperty()).getId()).getByFirst(((IntegerClass)e1).getId())) {
+					if (subConcept(factory.getDataTypeFactory().createClass(n1), isvf2.getFiller())) return true;
 				}
 			}
 			return false;
 		}
+	}
+	
+	private Collection<IntegerObjectSomeValuesFrom> findExistentialRestrictions(Integer property, IntegerClassExpression expression) {
+		Collection<IntegerObjectSomeValuesFrom> set = new ArrayList<IntegerObjectSomeValuesFrom>();
+		if (expression instanceof IntegerObjectIntersectionOf) {
+			for (IntegerClassExpression sub : ((IntegerObjectIntersectionOf)expression).getOperands()) {
+				set.addAll(findExistentialRestrictions(property, sub));
+			}
+		} else if (expression instanceof IntegerObjectSomeValuesFrom) {
+			IntegerObjectSomeValuesFrom isvf = (IntegerObjectSomeValuesFrom)expression;
+			if (((IntegerObjectProperty) isvf.getProperty()).getId().intValue() == property.intValue()) {
+				set.add(isvf);
+			}
+		}
+		return set;
 	}
 	
 	/**
@@ -135,21 +171,21 @@ public class Minimizer {
 			Set<IntegerClassExpression> exprs = ((IntegerObjectIntersectionOf)expression).getOperands();
 			Set<IntegerClassExpression> newExprs = new HashSet<IntegerClassExpression>();
 			for (IntegerClassExpression e : exprs) {
-				if (e.isLiteral() && ((IntegerClass)e).getId() < idGen.getFirstClassId())
+				if (e.isLiteral() && !idGen.isAuxiliary(((IntegerClass)e).getId()))
 					newExprs.add(e);
 				else if (!e.isLiteral())
 					newExprs.add(removeTemporaryNames(e));
 			}
-			if (newExprs.isEmpty()) newExprs.add(new IntegerClass(1));
-			return new IntegerObjectIntersectionOf(newExprs);
+			if (newExprs.isEmpty()) newExprs.add(factory.getDataTypeFactory().getTopClass());
+			return factory.getDataTypeFactory().createObjectIntersectionOf(newExprs);
 		} else if (expression instanceof IntegerObjectSomeValuesFrom) {
 			// if the class expression is a existential restriction, de-normalize the inner class expression
 			IntegerObjectSomeValuesFrom e = (IntegerObjectSomeValuesFrom)expression;
-			return new IntegerObjectSomeValuesFrom(e.getProperty(), removeTemporaryNames(e.getFiller()));
+			return factory.getDataTypeFactory().createObjectSomeValuesFrom(e.getProperty(), removeTemporaryNames(e.getFiller()));
 		} else {
 			// if its a class, test if it was introduced during normalization - then return the top concept
-			if (((IntegerClass)expression).getId() < idGen.getFirstClassId()) return expression;
-			else return new IntegerClass(1);
+			if (!idGen.isAuxiliary(((IntegerClass)expression).getId())) return expression;
+			else return factory.getDataTypeFactory().getTopClass();
 		}
 	}
 }

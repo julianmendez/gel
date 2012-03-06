@@ -1,38 +1,28 @@
 package de.tudresden.inf.lat.gel;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassExpression;
 import org.semanticweb.owlapi.model.OWLDataFactory;
-import org.semanticweb.owlapi.model.OWLDataHasValue;
-import org.semanticweb.owlapi.model.OWLDataOneOf;
-import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLLiteral;
+import org.semanticweb.owlapi.model.OWLEquivalentClassesAxiom;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLNegativeDataPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
-
-import de.tudresden.inf.lat.jcel.core.axiom.complex.ComplexIntegerAxiom;
-import de.tudresden.inf.lat.jcel.core.axiom.complex.IntegerEquivalentClassesAxiom;
-import de.tudresden.inf.lat.jcel.core.datatype.IntegerClass;
-import de.tudresden.inf.lat.jcel.core.datatype.IntegerClassExpression;
-import de.tudresden.inf.lat.jcel.core.datatype.IntegerObjectIntersectionOf;
-import de.tudresden.inf.lat.jcel.core.datatype.IntegerObjectSomeValuesFrom;
-import de.tudresden.inf.lat.jcel.owlapi.translator.AxiomSetTranslator;
+import de.tudresden.inf.lat.jcel.ontology.axiom.complex.ComplexIntegerAxiom;
+import de.tudresden.inf.lat.jcel.ontology.axiom.extension.IntegerOntologyObjectFactory;
+import de.tudresden.inf.lat.jcel.ontology.axiom.extension.IntegerOntologyObjectFactoryImpl;
+import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerClass;
+import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerClassExpression;
+import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerObjectIntersectionOf;
+import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerObjectProperty;
+import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerObjectSomeValuesFrom;
 import de.tudresden.inf.lat.jcel.owlapi.translator.TranslationRepository;
+import de.tudresden.inf.lat.jcel.owlapi.translator.Translator;
 
 /**
  * The gel reasoner is a wrapper for the processor, that provides a nice interface.
@@ -41,13 +31,6 @@ import de.tudresden.inf.lat.jcel.owlapi.translator.TranslationRepository;
  */
 public class GelReasoner {
 	private OWLOntology ontology = null;
-	private OWLClass bottomClass = null;
-	private OWLClass topClass = null;
-	private OWLObjectProperty bottomObjectProperty = null;
-	private OWLObjectProperty topObjectProperty = null;
-	private OWLDataProperty bottomDataProperty = null;
-	private OWLDataProperty topDataProperty = null;
-	//private int firstNewConceptId = 0;
 
 	/**
 	 * Creates a new Reasoner object that can be used to compute least common subsumers and most specific concepts for the given ontology.
@@ -55,58 +38,67 @@ public class GelReasoner {
 	 */
 	public GelReasoner(OWLOntology ontology) {
 		this.ontology = ontology;
-		OWLDataFactory factory = ontology.getOWLOntologyManager().getOWLDataFactory();
-		bottomClass = factory.getOWLNothing();
-		topClass = ontology.getOWLOntologyManager().getOWLDataFactory().getOWLThing();
-		bottomObjectProperty = factory.getOWLBottomObjectProperty();
-		topObjectProperty = factory.getOWLTopObjectProperty();
-		bottomDataProperty = factory.getOWLBottomDataProperty();
-		topDataProperty = factory.getOWLTopDataProperty();
 	}
 	
 
-	public OWLClassExpression ComputeLcs(int k, OWLClassExpression[] concepts, boolean simplify) {
-		Set<OWLAxiom> axioms = ontology.getAxioms();
-		OWLClass[] newConcepts = new OWLClass[concepts.length];
+	public OWLClassExpression ComputeLcs(int k, OWLClassExpression a, OWLClassExpression b, boolean simplify, boolean opti1, boolean opti2) {
 		OWLDataFactory factory = ontology.getOWLOntologyManager().getOWLDataFactory();
-		for (int i=0; i<concepts.length; i++) {
-			newConcepts[i] = factory.getOWLClass(IRI.create("http://de.tudresden.inf.lat.gel#Concept" + i));
-			axioms.add(factory.getOWLEquivalentClassesAxiom(newConcepts[i], concepts[i]));
-		}
+		//create new axioms A\equiv C, B\equiv D and add to ontology
+		OWLClass newA = factory.getOWLClass(IRI.create("http://de.tudresden.inf.lat.gel#ConceptA"));
+		OWLClass newB = factory.getOWLClass(IRI.create("http://de.tudresden.inf.lat.gel#ConceptB"));
+		OWLEquivalentClassesAxiom newAxiomA = factory.getOWLEquivalentClassesAxiom(newA, a);
+		OWLEquivalentClassesAxiom newAxiomB = factory.getOWLEquivalentClassesAxiom(newB, b);
+		ontology.getOWLOntologyManager().addAxiom(ontology, newAxiomA);
+		ontology.getOWLOntologyManager().addAxiom(ontology, newAxiomB);
 
-		TranslationRepository translationRep = createTranslationRepository(axioms);
-		AxiomSetTranslator translator = new AxiomSetTranslator(translationRep);
+		//translate ontology
+		IntegerOntologyObjectFactory intfac = new IntegerOntologyObjectFactoryImpl();
+		Translator translator = new Translator(ontology, intfac);
+		Set<ComplexIntegerAxiom> axiomSet = translator.getOntology();
 		
-		Set<ComplexIntegerAxiom> axiomSet = translator.translate(axioms);
-		int[] transConcepts = new int[newConcepts.length];
-		for (int i=0; i<newConcepts.length; i++) {
-			transConcepts[i] = translator.getClassMap().get(newConcepts[i]);
-		}
-		LcsProcessor lcsProcessor = new LcsProcessor(axiomSet, transConcepts, k, simplify);
+		//find ids of concepts A, B, ...
+		int transA =  translator.getTranslationRepository().getId(newA);
+		int transB =  translator.getTranslationRepository().getId(newB);
 		
-		Date start = new Date();
+		//compute lcs of these ids
+		final DecimalFormat df = new DecimalFormat( "0.0" );
+		LcsProcessor lcsProcessor = new LcsProcessor(axiomSet, transA, transB, k, simplify, opti1, opti2, intfac);
+		long start = System.nanoTime();
 		while (!lcsProcessor.isReady()) lcsProcessor.process();
-		System.out.println("Total time: " + ((new Date()).getTime() - start.getTime()) + "ms");
+		System.out.println("Total time: " + df.format((System.nanoTime() - start) / 1000000.0) + "ms");
 		IntegerClassExpression lcs = lcsProcessor.getLcs();
+		
+		//remove axioms again
+		ontology.getOWLOntologyManager().removeAxiom(ontology, newAxiomA);
+		ontology.getOWLOntologyManager().removeAxiom(ontology, newAxiomB);
+		
+		//translate back to OWL expressions
 		if (lcs instanceof IntegerClass) {
 			IntegerClass lcsClass = (IntegerClass)lcs;
-			for (int i=0; i<concepts.length; i++) {
-				if (translationRep.getOWLClass(lcsClass.getId()).toStringID().equals(newConcepts[i].toStringID())) return concepts[i];
-			}
+			if (translator.translateC(lcsClass).toStringID().equals(newA.toStringID())) return a;
+			if (translator.translateC(lcsClass).toStringID().equals(newB.toStringID())) return b;
 		}
-		return translateBack(translationRep, lcs);
+		return translateBack(translator.getTranslationRepository(), lcs);
+	}
+	
+	public OWLClassExpression ComputeLcs(int k, OWLClassExpression[] concepts, boolean simplify, boolean opti1, boolean opti2) {
+		OWLClassExpression lcs = concepts[0];
+		for (int i=1; i<concepts.length; i++) {
+			lcs = ComputeLcs(k, lcs, concepts[i], simplify, opti1, opti2);
+		}
+		return lcs;
 	}
 	
 	public OWLClassExpression ComputeMsc(int k, OWLNamedIndividual individual, boolean simplify) {
-		TranslationRepository translationRep = createTranslationRepository(ontology.getAxioms());
-		AxiomSetTranslator translator = new AxiomSetTranslator(translationRep);
-		Set<ComplexIntegerAxiom> axiomSet = translator.translate(ontology.getAxioms());
+		IntegerOntologyObjectFactory intfac = new IntegerOntologyObjectFactoryImpl();
+		Translator translator = new Translator(ontology, intfac);
+		Set<ComplexIntegerAxiom> axiomSet = translator.getOntology();
 	
-		int indiv = translator.getIndividualMap().get(individual);
-		MscProcessor mscProcessor = new MscProcessor(axiomSet, indiv, k, simplify);
+		int indiv = translator.getTranslationRepository().getId(individual);
+		MscProcessor mscProcessor = new MscProcessor(axiomSet, indiv, k, simplify, intfac);
 		while (!mscProcessor.isReady()) mscProcessor.process();
 		
-		return translateBack(translationRep, mscProcessor.getMsc());
+		return translateBack(translator.getTranslationRepository(), mscProcessor.getMsc());
 	}
 	
 	private OWLClassExpression translateBack(TranslationRepository rep, IntegerClassExpression exp) {
@@ -120,93 +112,11 @@ public class GelReasoner {
 			}
 			return factory.getOWLObjectIntersectionOf(classExpressions);
 		} else if (exp instanceof IntegerObjectSomeValuesFrom) {
-			OWLObjectProperty property = rep.getOWLObjectProperty(((IntegerObjectSomeValuesFrom) exp).getProperty().getId());
+			OWLObjectProperty property = rep.getOWLObjectProperty(((IntegerObjectProperty)((IntegerObjectSomeValuesFrom) exp).getProperty()).getId());
 			OWLClassExpression e = translateBack(rep, ((IntegerObjectSomeValuesFrom) exp).getFiller());
 			return factory.getOWLObjectSomeValuesFrom(property, e);
 		} else {
 			return null;
 		}
-	}
-	
-	
-	protected TranslationRepository createTranslationRepository(Set<OWLAxiom> axiomSet) {
-		TranslationRepository ret = null;
-		if (axiomSet != null) {
-			Set<OWLClass> conceptNameSet = collectClasses(axiomSet);
-			Set<OWLObjectProperty> propertySet = collectProperties(axiomSet);
-			Set<OWLNamedIndividual> individualSet = collectIndividuals(axiomSet);
-			Set<OWLDataProperty> dataPropertySet = collectDataProperties(axiomSet);
-			Set<OWLLiteral> literalSet = collectLiterals(axiomSet);
-			ret = new TranslationRepository();
-			ret.load(bottomClass, topClass,	bottomObjectProperty, topObjectProperty, bottomDataProperty, topDataProperty,
-					conceptNameSet, propertySet, individualSet, dataPropertySet, literalSet);
-			//firstNewConceptId = conceptNameSet.size()+2;
-		}
-		return ret;
-	}
-
-	protected Set<OWLClass> collectClasses(Set<OWLAxiom> axiomSet) {
-		Set<OWLClass> ret = new HashSet<OWLClass>();
-		for (OWLAxiom axiom : axiomSet) {
-			ret.addAll(axiom.getClassesInSignature());
-		}
-		ret.add(bottomClass);
-		ret.add(topClass);
-		return ret;
-	}
-
-	protected Set<OWLNamedIndividual> collectIndividuals(Set<OWLAxiom> axiomSet) {
-		Set<OWLNamedIndividual> ret = new HashSet<OWLNamedIndividual>();
-		for (OWLAxiom axiom : axiomSet) {
-			Set<OWLNamedIndividual> entities = axiom
-					.getIndividualsInSignature();
-			ret.addAll(entities);
-		}
-		return ret;
-	}
-
-	protected Set<OWLObjectProperty> collectProperties(Set<OWLAxiom> axiomSet) {
-		Set<OWLObjectProperty> ret = new HashSet<OWLObjectProperty>();
-		for (OWLAxiom axiom : axiomSet) {
-			Set<OWLObjectProperty> entities = axiom
-					.getObjectPropertiesInSignature();
-			ret.addAll(entities);
-		}
-		return ret;
-	}
-
-	private Set<OWLDataProperty> collectDataProperties(Set<OWLAxiom> axiomSet) {
-		Set<OWLDataProperty> ret = new HashSet<OWLDataProperty>();
-		for (OWLAxiom axiom : axiomSet) {
-			Set<OWLDataProperty> entities = axiom
-					.getDataPropertiesInSignature();
-			ret.addAll(entities);
-		}
-		return ret;
-	}
-
-	private Set<OWLLiteral> collectLiterals(Set<OWLAxiom> axiomSet) {
-		Set<OWLLiteral> ret = new HashSet<OWLLiteral>();
-		for (OWLAxiom axiom : axiomSet) {
-			if ((axiom instanceof OWLDataPropertyAssertionAxiom)) {
-				ret.add(((OWLDataPropertyAssertionAxiom) axiom).getObject());
-			}
-			if (axiom instanceof OWLNegativeDataPropertyAssertionAxiom) {
-				ret.add(((OWLNegativeDataPropertyAssertionAxiom) axiom)
-						.getObject());
-			}
-			Set<OWLClassExpression> classExpressions = axiom
-					.getNestedClassExpressions();
-			for (OWLClassExpression classExpr : classExpressions) {
-				if (classExpr instanceof OWLDataHasValue) {
-					ret.add(((OWLDataHasValue) classExpr).getValue());
-				}
-				if (classExpr instanceof OWLDataOneOf) {
-					ret.addAll(((OWLDataOneOf) classExpr).getValues());
-				}
-			}
-
-		}
-		return ret;
 	}
 }
