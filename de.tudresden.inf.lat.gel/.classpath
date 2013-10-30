@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/main"/>
+	<classpathentry excluding="de/tudresden/inf/lat/gel/CommandLine.java" kind="src" path="src/main"/>
 	<classpathentry kind="src" path="src/conf"/>
 	<classpathentry kind="src" path="src/manifest"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="/de.tudresden.inf.lat.gel/lib/org.protege.editor/jars/org.protege.editor.core.application-4.1.jar"/>
-	<classpathentry kind="lib" path="/de.tudresden.inf.lat.gel/lib/org.protege.editor/jars/org.protege.editor.owl-4.1.jar"/>
-	<classpathentry kind="lib" path="/de.tudresden.inf.lat.gel/lib/jcel.core/jcel.core-0.16.0.jar" sourcepath="/jcel.core"/>
-	<classpathentry kind="lib" path="/de.tudresden.inf.lat.gel/lib/jcel.owlapi/jcel.owlapi-0.16.0.jar" sourcepath="/jcel.owlapi"/>
-	<classpathentry kind="lib" path="/de.tudresden.inf.lat.gel/lib/jcel.ontology/jcel.ontology-0.16.0.jar" sourcepath="/jcel.ontology"/>
-	<classpathentry kind="lib" path="/de.tudresden.inf.lat.gel/lib/owlapi/owlapi-3.2.4.jar" sourcepath="/de.tudresden.inf.lat.gel/lib/owlapi/owlapi-src-3.2.4.jar"/>
+	<classpathentry kind="lib" path="lib/org.protege.editor/jars/org.protege.editor.core.application-4.1.jar"/>
+	<classpathentry kind="lib" path="lib/org.protege.editor/jars/org.protege.editor.owl-4.1.jar"/>
+	<classpathentry kind="lib" path="lib/jcel.core/jcel.core-0.16.0.jar" sourcepath="/jcel.core"/>
+	<classpathentry kind="lib" path="lib/jcel.owlapi/jcel.owlapi-0.16.0.jar" sourcepath="/jcel.owlapi"/>
+	<classpathentry kind="lib" path="lib/jcel.ontology/jcel.ontology-0.16.0.jar" sourcepath="/jcel.ontology"/>
+	<classpathentry kind="lib" path="lib/owlapi/owlapi-3.2.4.jar" sourcepath="lib/owlapi/owlapi-src-3.2.4.jar"/>
 	<classpathentry kind="output" path="dist"/>
 </classpath>
