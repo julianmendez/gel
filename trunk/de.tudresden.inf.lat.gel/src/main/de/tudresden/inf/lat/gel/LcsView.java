@@ -15,20 +15,30 @@ import java.util.List;
 import java.util.ArrayList;
 import javax.swing.*;
 
+/**
+ * The unser interface as protege plugin which allows the user to select concept descriptions and compute the
+ * least common subsumer of these.
+ * 
+ * @author Andreas Ecke
+ */
 public class LcsView extends AbstractActiveOntologyViewComponent implements ActionListener {
 	private static final long serialVersionUID = 4052074502148410361L;
 	
 	private JSpinner lcsDepth;
 	private JCheckBox lcsSimplifyCheckBox;
-	private JCheckBox lcsOpti1CheckBox;
-	private JCheckBox lcsOpti2CheckBox;
 	private JButton addField;
 	private Box inputBox;
 	
+	// the interface can have an arbitrary number of concepts - these list store the concepts and the text/check boxes
 	List<JCheckBox> inputCheckBoxes = new ArrayList<JCheckBox>();
 	List<JTextField> inputTextFields = new ArrayList<JTextField>();
 	List<OWLClassExpression> inputConcepts = new ArrayList<OWLClassExpression>();
 	
+	/**
+	 * Creates a new text/check box for an additional input concept.
+	 * 
+	 * @return a box that contains all interface stuff
+	 */
 	private Box createField() {
 		int i = inputConcepts.size();
 		inputConcepts.add(getOWLModelManager().getOWLDataFactory().getOWLThing());
@@ -48,16 +58,21 @@ public class LcsView extends AbstractActiveOntologyViewComponent implements Acti
 		return field;
 	}
 	
-	// create the window layout
+	/**
+	 * Create the overall user interface.
+	 */
 	@Override
 	protected void initialiseOntologyView() throws Exception {
 		setLayout(new BorderLayout());
 		
 		JPanel inputPanel = new JPanel(new BorderLayout());
 		inputBox = Box.createVerticalBox();
-		//create input fields
+		
+		//create two input fields for the start
 		inputBox.add(createField());
 		inputBox.add(createField());
+		
+		// button to add more inputs
 		addField = new JButton("more");
 		addField.setActionCommand("add");
 		addField.addActionListener(this);
@@ -66,6 +81,7 @@ public class LcsView extends AbstractActiveOntologyViewComponent implements Acti
 		JScrollPane inputList = new JScrollPane(inputPanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		inputList.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), "Input concept descriptions"));
 
+		// options: role-depth and simplification
 		Box optionsBox = Box.createVerticalBox();
 		optionsBox.setAlignmentX(0.0f);
 		optionsBox.setAlignmentY(0.0f);
@@ -78,11 +94,9 @@ public class LcsView extends AbstractActiveOntologyViewComponent implements Acti
 		depthBox.add(lcsDepth);
 		optionsBox.add(depthBox);
 		lcsSimplifyCheckBox = new JCheckBox("Simplify result", true);
-		lcsOpti1CheckBox = new JCheckBox("Optimization 1", true);
-		lcsOpti2CheckBox = new JCheckBox("Optimization 2", false);
 		optionsBox.add(lcsSimplifyCheckBox);
-		optionsBox.add(lcsOpti1CheckBox);
-		optionsBox.add(lcsOpti2CheckBox);
+		
+		// button to start the computation
 		JButton lcsButton = new JButton("Compute Lcs");
 		lcsButton.setActionCommand("lcs");
 		lcsButton.addActionListener(this);
@@ -92,17 +106,16 @@ public class LcsView extends AbstractActiveOntologyViewComponent implements Acti
 		add(optionsBox, BorderLayout.SOUTH);
 	}
 
+	/**
+	 * Called when the user presses on of the buttons.
+	 * 
+	 * @param e The event that contains (among other things) the action command of the pressed button
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// button click - compute lsc
 		if ("lcs".equals(e.getActionCommand())) {
+			// button click - compute lsc
 			GelReasoner r = new GelReasoner(super.getOWLModelManager().getActiveOntology());
-			/*ArrayList<String> s = new ArrayList<String>();
-			// select all concepts where the checkbox is checked
-			for (int i=0; i<8; i++) {
-				if (lcsInputCheckBoxes[i].isSelected())
-					s.add(lcsInputTextFields[i].getText());
-			}*/
 			ArrayList<OWLClassExpression> concepts = new ArrayList<OWLClassExpression>();
 			for (int i=0; i<inputConcepts.size(); i++) {
 				if (inputCheckBoxes.get(i).isSelected()) {
@@ -113,7 +126,7 @@ public class LcsView extends AbstractActiveOntologyViewComponent implements Acti
 				// if there are at least two, compute the lcs
 				OWLClassExpression[] n = new OWLClassExpression[concepts.size()];
 				n = concepts.toArray(n);
-				OWLClassExpression result = r.ComputeLcs((Integer)lcsDepth.getValue(), n, lcsSimplifyCheckBox.isSelected(), lcsOpti1CheckBox.isSelected(), lcsOpti2CheckBox.isSelected());
+				OWLClassExpression result = r.leastCommonSubsumer(n, (Integer)lcsDepth.getValue(), lcsSimplifyCheckBox.isSelected());
 				ClassExpressionEditor cee = new ClassExpressionEditor(getOWLWorkspace());
 				cee.showDialog(result);
 			} else {
@@ -121,11 +134,13 @@ public class LcsView extends AbstractActiveOntologyViewComponent implements Acti
 				//lcsResult.setText("Can't compute the lcs for less than 2 concepts");
 			}
 		} else if (e.getActionCommand().startsWith("edit")) {
+			// edit the specific concept
 			int num = Integer.parseInt(e.getActionCommand().substring(4));
 			ClassExpressionEditor cee = new ClassExpressionEditor(getOWLWorkspace());
 			inputConcepts.set(num, cee.showDialog(inputConcepts.get(num)));
 			inputTextFields.get(num).setText(render(inputConcepts.get(num)));
 		} else if ("add".equals(e.getActionCommand())) {
+			// add a new input field
 			inputBox.remove(addField);
 			inputBox.add(createField());
 			inputBox.add(addField);
@@ -133,6 +148,12 @@ public class LcsView extends AbstractActiveOntologyViewComponent implements Acti
 		}
 	}
 	
+	/**
+	 * Prints a concept as string.
+	 * 
+	 * @param e The concept to print
+	 * @return string representation of the concept
+	 */
 	private String render(OWLClassExpression e) {
 		if (e instanceof OWLClass) {
 			return ((OWLClass)e).getIRI().getFragment();
