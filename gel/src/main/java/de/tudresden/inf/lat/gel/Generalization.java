@@ -6,8 +6,8 @@ import java.util.Map;
 
 import de.tudresden.inf.lat.jcel.core.graph.IntegerBinaryRelation;
 import de.tudresden.inf.lat.jcel.core.graph.IntegerSubsumerGraph;
+import de.tudresden.inf.lat.jcel.coreontology.datatype.IntegerEntityManager;
 import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerDataTypeFactory;
-import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerEntityManager;
 
 /**
  * This class provided common methods and functions used by generalization inferences. Those generalizations
@@ -35,7 +35,7 @@ public abstract class Generalization {
 		entityManager = processor.getEntityManagerX();
 		classGraph = processor.getClassGraphX();
 		objectPropertyGraph = processor.getObjectPropertyGraphX();
-		dataTypeFactory = processor.getOntologyObjectFactory().getDataTypeFactory();
+		dataTypeFactory = processor.getIntegerOntologyObjectFactory().getDataTypeFactory();
 		relationGraph = processor.getRelationGraphX();
 	}
 
