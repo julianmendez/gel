@@ -38,7 +38,7 @@ public class GelReasoner {
 	 * Creates a new Reasoner object that can be used to compute least common
 	 * subsumers and most specific concepts for the given ontology.
 	 * 
-	 * @param ontology
+	 * @param ontology ontology
 	 */
 	public GelReasoner(OWLOntology ontology) {
 		this.ontology = ontology;

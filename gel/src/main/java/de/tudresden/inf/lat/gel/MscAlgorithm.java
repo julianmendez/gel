@@ -10,8 +10,7 @@ public class MscAlgorithm extends Generalization {
 	 * Computes the role-depth bounded least common subsumer of the given
 	 * concepts and the role-depth k.
 	 * 
-	 * @param concepts A list of all concepts from which to compute the lcs, as
-	 *        Integers
+	 * @param element element
 	 * @param k The role-depth bound
 	 * @return the role-depth bounded least common subsumer
 	 */
