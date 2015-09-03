@@ -14,20 +14,8 @@
 
 		<dependency>
 			<groupId>de.tu-dresden.inf.lat.jcel</groupId>
-			<artifactId>jcel-ontology</artifactId>
-			<version>0.16.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>de.tu-dresden.inf.lat.jcel</groupId>
-			<artifactId>jcel-core</artifactId>
-			<version>0.16.0</version>
-		</dependency>
-
-		<dependency>
-			<groupId>de.tu-dresden.inf.lat.jcel</groupId>
 			<artifactId>jcel-owlapi</artifactId>
-			<version>0.16.0</version>
+			<version>0.22.0</version>
 		</dependency>
 
 		<dependency>
@@ -149,9 +137,11 @@
 							<Import-Package>${import.package}</Import-Package>
 							<Include-Resource>
 								{maven-resources}, {maven-dependencies},
-								@jcel-ontology-0.16.0.jar,
-								@jcel-core-0.16.0.jar,
-								@jcel-owlapi-0.16.0.jar
+								@jcel-coreontology-0.22.0.jar,
+								@jcel-core-0.22.0.jar,
+								@jcel-ontology-0.22.0.jar,
+								@jcel-reasoner-0.22.0.jar,
+								@jcel-owlapi-0.22.0.jar
 							</Include-Resource>
 							<Require-Bundle>${require.bundle}</Require-Bundle>
 						</instructions>

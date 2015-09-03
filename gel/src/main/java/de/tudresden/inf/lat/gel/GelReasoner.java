@@ -93,8 +93,8 @@ public class GelReasoner {
 
 		// translate ontology
 		IntegerOntologyObjectFactory jcelFactory = new IntegerOntologyObjectFactoryImpl();
-		Translator translator = new Translator(ontology, jcelFactory);
-		Set<ComplexIntegerAxiom> axiomSet = translator.getOntology();
+		Translator translator = new Translator(ontology.getOWLOntologyManager().getOWLDataFactory(), jcelFactory);
+		Set<ComplexIntegerAxiom> axiomSet = translator.translateSA(ontology.getAxioms());
 
 		// get IDs of the newly introduced concept names
 		List<Integer> ids = new ArrayList<Integer>(concepts.length);
@@ -103,7 +103,7 @@ public class GelReasoner {
 		}
 
 		// classify the ontology
-		GelProcessor processor = new GelProcessor(axiomSet, jcelFactory);
+		GelProcessor processor = GelProcessor.newGelProcessor(axiomSet, jcelFactory);
 		while (!processor.isReady())
 			processor.process();
 
@@ -122,7 +122,7 @@ public class GelReasoner {
 		if (lcs instanceof IntegerClass) {
 			IntegerClass concept = (IntegerClass) lcs;
 			for (int i = 0; i < concepts.length; i++) {
-				if (concept.getId().equals(ids.get(i))) {
+				if (concept.getId() == ids.get(i).intValue()) {
 					return concepts[i];
 				}
 			}
@@ -150,12 +150,12 @@ public class GelReasoner {
 	public OWLClassExpression mostSpecificConcept(OWLNamedIndividual individual, int k, boolean simplify) {
 		// translate the ontology to jCel format
 		IntegerOntologyObjectFactory factory = new IntegerOntologyObjectFactoryImpl();
-		Translator translator = new Translator(ontology, factory);
-		Set<ComplexIntegerAxiom> axiomSet = translator.getOntology();
+		Translator translator = new Translator(ontology.getOWLOntologyManager().getOWLDataFactory(), factory);
+		Set<ComplexIntegerAxiom> axiomSet = translator.translateSA(ontology.getAxioms());
 
 		// classify the ontology
 		int individualId = translator.getTranslationRepository().getId(individual);
-		GelProcessor processor = new GelProcessor(axiomSet, factory);
+		GelProcessor processor = GelProcessor.newGelProcessor(axiomSet, factory);
 		while (!processor.isReady())
 			processor.process();
 

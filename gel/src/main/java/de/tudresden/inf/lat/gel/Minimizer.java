@@ -9,7 +9,7 @@ import java.util.Set;
 import de.tudresden.inf.lat.jcel.core.algorithm.cel.CelExtendedOntology;
 import de.tudresden.inf.lat.jcel.core.graph.IntegerBinaryRelation;
 import de.tudresden.inf.lat.jcel.core.graph.IntegerSubsumerGraph;
-import de.tudresden.inf.lat.jcel.ontology.axiom.normalized.RI3Axiom;
+import de.tudresden.inf.lat.jcel.coreontology.axiom.RI3Axiom;
 import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerClass;
 import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerClassExpression;
 import de.tudresden.inf.lat.jcel.ontology.datatype.IntegerDataTypeFactory;
@@ -42,7 +42,7 @@ public class Minimizer {
 	public void loadDataStructures(GelProcessor processor) {
 		classGraph = processor.getClassGraphX();
 		objectPropertyGraph = processor.getObjectPropertyGraphX();
-		dataTypeFactory = processor.getOntologyObjectFactory().getDataTypeFactory();
+		dataTypeFactory = processor.getIntegerOntologyObjectFactory().getDataTypeFactory();
 		relationGraph = processor.getRelationGraphX();
 		ontology = processor.getOntologyX();
 	}
@@ -172,7 +172,7 @@ public class Minimizer {
 			}
 		} else if (expression instanceof IntegerObjectSomeValuesFrom) {
 			IntegerObjectSomeValuesFrom isvf = (IntegerObjectSomeValuesFrom) expression;
-			if (((IntegerObjectProperty) isvf.getProperty()).getId().intValue() == property.intValue()) {
+			if (((IntegerObjectProperty) isvf.getProperty()).getId() == property.intValue()) {
 				set.add(isvf);
 			}
 		}
