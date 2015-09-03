@@ -218,16 +218,6 @@
 		<developerConnection>scm:git:https://github.com/julianmendez/gel.git</developerConnection>
 	</scm>
 
-	<repositories>
-
-		<repository>
-			<id>gelrepository</id>
-			<name>gel local Maven repository</name>
-			<url>file:${project.basedir}/lib</url>
-		</repository>
-
-	</repositories>
-
 	<profiles>
 
 		<profile>
