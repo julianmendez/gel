@@ -44,7 +44,7 @@ See [release notes](http://github.com/julianmendez/gel/blob/master/RELEASE-NOTES
 
 ### Description
 
-The GEL plugin for Protégé implements the **least common subsumer** and **most specific concept** inferences for EL-based ontologies in Protégé. The current version of these generalizations works with ELH ontologies and uses jcel as underlying classifier.
+The GEL plugin for [Protégé](http://protege.stanford.edu/) implements the **least common subsumer** and **most specific concept** inferences for EL-based ontologies in Protégé. The current version of these generalizations works with ELH ontologies and uses [jcel](https://github.com/julianmendez/jcel) as underlying classifier.
 
 
 ### Installation
