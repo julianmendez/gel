@@ -53,7 +53,7 @@ The GEL plugin for [Protégé](http://protege.stanford.edu/) implements the **le
 
 ### Installation
 
-To install, just download the jar-file (`de.tudresden.inf.lat.gel-`*version*`.jar`) and move it to the plugin folder of the Protégé directory. After restarting Protégé, you should find "Least Common Subsumer" and "Most Specific Concept" in the menu "Window > Views > Ontology Views". Just drag these somewhere onto the window and you should be ready to get started.
+To install, just download the jar-file (`de.tu-dresden.inf.lat.gel-`*version*`.jar`) and move it to the plugin folder of the Protégé directory. After restarting Protégé, you should find "Least Common Subsumer" and "Most Specific Concept" in the menu "Window > Views > Ontology Views". Just drag these somewhere onto the window and you should be ready to get started.
 
 
 ### Use
