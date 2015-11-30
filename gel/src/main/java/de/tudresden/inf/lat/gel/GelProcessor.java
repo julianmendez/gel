@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import de.tudresden.inf.lat.jcel.core.algorithm.cel.CelExtendedOntology;
-import de.tudresden.inf.lat.jcel.core.algorithm.cel.CelProcessor;
+import de.tudresden.inf.lat.jcel.core.algorithm.cel.CelProcessorX;
 import de.tudresden.inf.lat.jcel.core.graph.IntegerBinaryRelation;
 import de.tudresden.inf.lat.jcel.core.graph.IntegerSubsumerGraph;
 import de.tudresden.inf.lat.jcel.core.graph.IntegerSubsumerGraphImpl;
@@ -17,7 +17,7 @@ import de.tudresden.inf.lat.jcel.ontology.axiom.complex.ComplexIntegerAxiom;
 import de.tudresden.inf.lat.jcel.ontology.axiom.extension.IntegerOntologyObjectFactory;
 import de.tudresden.inf.lat.jcel.ontology.normalization.OntologyNormalizer;
 
-public class GelProcessor extends CelProcessor {
+public class GelProcessor extends CelProcessorX {
 	private IntegerSubsumerGraph classGraph;
 	private IntegerSubsumerGraph objectPropertyGraph;
 	private Map<Integer, IntegerBinaryRelation> relationGraph;
