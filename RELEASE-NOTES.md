@@ -37,7 +37,7 @@ $ ant
 
 ### v0.16.0
 *(2012-03-06)*
-* first operation version
+* first operational version
 * uses jcel 0.16.0
 * runs on Java 6
 * uses the OWL API 3.2.4, and can be used as a plug-in for Protégé 4.1.0 .
