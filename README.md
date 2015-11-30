@@ -4,6 +4,10 @@
 
 This project implements generalization algorithms (role-depth bounded least common subsumer and most specific concept) for the description logics EL and extensions thereof.
 
+### Download
+
+* [plug-in](https://lat.inf.tu-dresden.de/systems/gel/files/gel/0.17.0/de.tu-dresden.inf.lat.gel-0.17.0.jar)
+
 
 ### Developers
 
