@@ -16,7 +16,7 @@
 ```
 $ mvn clean install
 ```
-* plug-in: `gel-plugin/target/de.tu-dresden.inf.lat.gel-0.17.0.jar`
+* plug-in: `gel/target/de.tu-dresden.inf.lat.gel-0.17.0.jar`
 
 
 
