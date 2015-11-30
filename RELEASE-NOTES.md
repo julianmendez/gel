@@ -24,9 +24,6 @@ $ mvn clean install
 ### v0.16.1
 *(2013-10-30)*
 * has been refactored and got superfluous code removed
-* uses jcel 0.16.0
-* runs on Java 6
-* uses the OWL API 3.2.4, and can be used as a plug-in for Protégé 4.1.0 .
 * build commands:
 ```
 $ cd de.tudresden.inf.lat.gel
