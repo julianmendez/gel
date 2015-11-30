@@ -44,12 +44,12 @@ See [release notes](http://github.com/julianmendez/gel/blob/master/RELEASE-NOTES
 
 ### Description
 
-The GEL plugin for Protege implements the least common subsumer and most specific concept inferences for EL-based ontologies in Protege. The current version of these generalizations works with ELH ontologies and uses jcel as underlying classifier.
+The GEL plugin for Protégé implements the **least common subsumer** and **most specific concept** inferences for EL-based ontologies in Protégé. The current version of these generalizations works with ELH ontologies and uses jcel as underlying classifier.
 
 
 ### Installation
 
-To install, just download the jar-file (de.tudresden.inf.lat.gel.jar) and move it to the plugin folder of the Protege directory. After restarting Protege, you should find "Least Common Subsumer" and "Most Specific Concept" in the menu "Window > Views > Ontology Views". Just drag these somewhere onto the window and you should be ready to get started.
+To install, just download the jar-file (`de.tudresden.inf.lat.gel-`*version*`.jar`) and move it to the plugin folder of the Protégé directory. After restarting Protégé, you should find "Least Common Subsumer" and "Most Specific Concept" in the menu "Window > Views > Ontology Views". Just drag these somewhere onto the window and you should be ready to get started.
 
 
 ### Use
