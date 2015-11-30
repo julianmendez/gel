@@ -37,6 +37,11 @@ $ mvn --offline clean install
 This software is distributed under the [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt).
 
 
+## Release Notes
+
+See [release notes](http://github.com/julianmendez/gel/blob/master/RELEASE-NOTES.md).
+
+
 ### Contact
 
 In case you need more information, please contact @julianmendez .
