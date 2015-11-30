@@ -217,6 +217,15 @@
 
 	<inceptionYear>2011</inceptionYear>
 
+	<licenses>
+
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+
+	</licenses>
+
 	<organization>
 		<name>Chair of Automata Theory - TU Dresden</name>
 		<url>http://lat.inf.tu-dresden.de</url>
