@@ -40,6 +40,7 @@ $ ant
 * uses the OWL API 3.2.4, and can be used as a plug-in for Protégé 4.1.0 .
 * build commands:
 ```
+$ cd de.tudresden.inf.lat.gel
 $ ant
 ```
 * plug-in: `de.tudresden.inf.lat.gel/dist/bundle/de.tudresden.inf.lat.gel.jar`
