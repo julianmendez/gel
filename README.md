@@ -6,7 +6,7 @@ This project implements generalization algorithms (role-depth bounded least comm
 
 ### Download
 
-* [Protégé plug-in](https://lat.inf.tu-dresden.de/systems/gel/files/gel/0.17.0/de.tu-dresden.inf.lat.gel-0.17.0.jar)
+* [Protégé plug-in](https://sourceforge.net/projects/latitude/files/gel/0.17.0/de.tu-dresden.inf.lat.gel-0.17.0.jar/download)
 
 
 ### Developers
