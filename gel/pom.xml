@@ -134,11 +134,33 @@
 				</plugin>
 
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>2.5.5</version>
+					<executions>
+						<execution>
+							<id>classes</id>
+							<phase>package</phase>
+							<goals>
+								<goal>single</goal>
+							</goals>
+							<configuration>
+								<appendAssemblyId>false</appendAssemblyId>
+								<descriptors>
+									<descriptor>${basedir}/src/assembly/classes.xml</descriptor>
+								</descriptors>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+
+				<plugin>
 					<groupId>org.apache.felix</groupId>
 					<artifactId>maven-bundle-plugin</artifactId>
 					<version>2.5.4</version>
 					<extensions>true</extensions>
 					<configuration>
+						<finalName>${project.groupId}-${project.version}</finalName>
 						<instructions>
 							<Bundle-SymbolicName>${project.groupId};singleton:=true</Bundle-SymbolicName>
 							<Bundle-Name>Generalizations for the EL family</Bundle-Name>
@@ -167,7 +189,6 @@
 			</plugins>
 		</pluginManagement>
 
-		<finalName>${project.groupId}-${project.version}</finalName>
 
 		<plugins>
 
@@ -189,6 +210,11 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
 			</plugin>
 
 			<plugin>
