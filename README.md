@@ -6,7 +6,16 @@ This project implements generalization algorithms (role-depth bounded least comm
 
 ## Download
 
-* [Protégé plug-in](https://sourceforge.net/projects/latitude/files/gel/0.17.0/de.tu-dresden.inf.lat.gel-0.17.0.jar/download)
+* [Protégé plug-in](https://sourceforge.net/projects/latitude/files/gel/0.17.1/de.tu-dresden.inf.lat.gel-0.17.1.jar/download)
+* [The Central Repository](https://repo1.maven.org/maven2/de/tu-dresden/inf/lat/gel/)
+* as dependency
+```xml
+<dependency>
+  <groupId>de.tu-dresden.inf.lat.gel</groupId>
+  <artifactId>gel</artifactId>
+  <version>0.17.1</version>
+</dependency>
+```
 
 
 ## Developers
@@ -32,6 +41,16 @@ $ mvn dependency:go-offline
 and once offline, use:
 ```
 $ mvn --offline clean install
+```
+
+The bundles uploaded to [Sonatype](https://oss.sonatype.org/) are created with:
+```
+$ mvn clean install -DperformRelease=true
+```
+and then:
+```
+$ cd gel/target
+$ jar -cf bundle.jar gel-*
 ```
 
 The version number is updated with:
