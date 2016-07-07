@@ -24,7 +24,7 @@ $ mvn clean install
 
 
 ### v0.17.1
-*(unreleased)*
+*(2016-07-07)*
 * uses jcel 0.23.1
 * build commands:
 ```
