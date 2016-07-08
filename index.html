@@ -20,7 +20,7 @@
 
     <section class="main-content">
       <h1>
-<a id="generalizations-for-the-el-family" class="anchor" href="#generalizations-for-the-el-family" aria-hidden="true"><span class="octicon octicon-link"></span></a><a href="http://julianmendez.github.io/gel">Generalizations for the EL family</a>
+<a id="generalizations-for-the-el-family" class="anchor" href="#generalizations-for-the-el-family" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a><a href="http://julianmendez.github.io/gel">Generalizations for the EL family</a>
 </h1>
 
 <p><a href="https://travis-ci.org/julianmendez/gel"><img src="https://travis-ci.org/julianmendez/gel.png?branch=master" alt="Build Status"></a></p>
@@ -28,21 +28,29 @@
 <p>This project implements generalization algorithms (role-depth bounded least common subsumer and most specific concept) for the description logics EL and extensions thereof.</p>
 
 <h2>
-<a id="download" class="anchor" href="#download" aria-hidden="true"><span class="octicon octicon-link"></span></a>Download</h2>
+<a id="download" class="anchor" href="#download" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Download</h2>
 
 <ul>
-<li><a href="https://sourceforge.net/projects/latitude/files/gel/0.17.0/de.tu-dresden.inf.lat.gel-0.17.0.jar/download">Protégé plug-in</a></li>
+<li><a href="https://sourceforge.net/projects/latitude/files/gel/0.17.1/de.tu-dresden.inf.lat.gel-0.17.1.jar/download">Protégé plug-in</a></li>
+<li><a href="https://repo1.maven.org/maven2/de/tu-dresden/inf/lat/gel/">The Central Repository</a></li>
+<li>as dependency</li>
 </ul>
 
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+  &lt;<span class="pl-ent">groupId</span>&gt;de.tu-dresden.inf.lat.gel&lt;/<span class="pl-ent">groupId</span>&gt;
+  &lt;<span class="pl-ent">artifactId</span>&gt;gel&lt;/<span class="pl-ent">artifactId</span>&gt;
+  &lt;<span class="pl-ent">version</span>&gt;0.17.1&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
 <h2>
-<a id="developers" class="anchor" href="#developers" aria-hidden="true"><span class="octicon octicon-link"></span></a>Developers</h2>
+<a id="developers" class="anchor" href="#developers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Developers</h2>
 
 <p>Original Developer: <a href="http://lat.inf.tu-dresden.de/%7Eecke">Andreas Ecke</a></p>
 
 <p>Additional Developer: <a href="http://lat.inf.tu-dresden.de/%7Emendez">Julian Mendez</a></p>
 
 <h2>
-<a id="source-code" class="anchor" href="#source-code" aria-hidden="true"><span class="octicon octicon-link"></span></a>Source code</h2>
+<a id="source-code" class="anchor" href="#source-code" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Source code</h2>
 
 <p>To checkout and compile the project, use:</p>
 
@@ -61,6 +69,17 @@ $ mvn clean install
 <pre><code>$ mvn --offline clean install
 </code></pre>
 
+<p>The bundles uploaded to <a href="https://oss.sonatype.org/">Sonatype</a> are created with:</p>
+
+<pre><code>$ mvn clean install -DperformRelease=true
+</code></pre>
+
+<p>and then:</p>
+
+<pre><code>$ cd gel/target
+$ jar -cf bundle.jar gel-*
+</code></pre>
+
 <p>The version number is updated with:</p>
 
 <pre><code>$ mvn versions:set -DnewVersion=NEW_VERSION
@@ -69,34 +88,34 @@ $ mvn clean install
 <p>where <em>NEW_VERSION</em> is the new version.</p>
 
 <h2>
-<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
 
 <p>This software is distributed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.txt">Apache License Version 2.0</a>.</p>
 
 <h2>
-<a id="release-notes" class="anchor" href="#release-notes" aria-hidden="true"><span class="octicon octicon-link"></span></a>Release Notes</h2>
+<a id="release-notes" class="anchor" href="#release-notes" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Release Notes</h2>
 
 <p>See <a href="http://github.com/julianmendez/gel/blob/master/RELEASE-NOTES.md">release notes</a>.</p>
 
 <h2>
-<a id="description" class="anchor" href="#description" aria-hidden="true"><span class="octicon octicon-link"></span></a>Description</h2>
+<a id="description" class="anchor" href="#description" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Description</h2>
 
 <p>The GEL plugin for <a href="http://protege.stanford.edu/">Protégé</a> implements the <strong>least common subsumer</strong> and <strong>most specific concept</strong> inferences for EL-based ontologies in Protégé. The current version of these generalizations works with ELH ontologies and uses <a href="https://github.com/julianmendez/jcel">jcel</a> as underlying classifier.</p>
 
 <h2>
-<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Installation</h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
 
 <p>To install, just download the jar-file (<code>de.tu-dresden.inf.lat.gel-</code><em>version</em><code>.jar</code>) and move it to the plugin folder of the Protégé directory. After restarting Protégé, you should find "Least Common Subsumer" and "Most Specific Concept" in the menu "Window &gt; Views &gt; Ontology Views". Just drag these somewhere onto the window and you should be ready to get started.</p>
 
 <h2>
-<a id="use" class="anchor" href="#use" aria-hidden="true"><span class="octicon octicon-link"></span></a>Use</h2>
+<a id="use" class="anchor" href="#use" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Use</h2>
 
 <p>When you drop the "Least Common Subsumer" (lcs) view somewhere, you will get various options for the lcs. You can compute the least common subsumer of up to 8 concept descriptions. In the top of the lcs-view, you see these eight concepts, which are initialized with the top-concept "Thing". To change them, click on the edit-button on the right side. A window pops up, where you can enter an arbitrary EL-concept description. Clicking "OK" will change the corresponding field. On the left side of each of the eight concepts, you will see checkboxes. Only these concepts where the checkbox is checked will be used for the computation of the lcs. In the bottom part of the view, you can choose a maximum role-depth, which bounds the lcs, and wether the result should be simplified. A click on "Compute Lcs" will run the computation and the resulting concept description will pop up in a new window.</p>
 
 <p>For the "Most Specific Concept" (msc), you have the same options (maximum role-depth and whether or not you want to simplify the result), but instead of several concept descriptions you can only choose a single individual in the top part of the view. A click on "Compute Msc" will run the computation of the most specific concept for that individual and the resulting concept description will pop up in a new window.</p>
 
 <h2>
-<a id="contact" class="anchor" href="#contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Contact</h2>
+<a id="contact" class="anchor" href="#contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contact</h2>
 
 <p>In case you need more information, please contact <a href="https://github.com/julianmendez" class="user-mention">@julianmendez</a> .</p>
 
