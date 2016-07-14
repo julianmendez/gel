@@ -9,7 +9,7 @@
 
 	<groupId>de.tu-dresden.inf.lat.gel</groupId>
 	<artifactId>gel-parent</artifactId>
-	<version>0.17.2-SNAPSHOT</version>
+	<version>0.17.2</version>
 	<packaging>pom</packaging>
 
 	<modules>
