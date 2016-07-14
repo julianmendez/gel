@@ -6,14 +6,14 @@ This project implements generalization algorithms (role-depth bounded least comm
 
 ## Download
 
-* [Protégé plug-in](https://sourceforge.net/projects/latitude/files/gel/0.17.1/de.tu-dresden.inf.lat.gel-0.17.1.jar/download)
+* [Protégé plug-in](https://sourceforge.net/projects/latitude/files/gel/0.17.2/de.tu-dresden.inf.lat.gel-0.17.2.jar/download)
 * [The Central Repository](https://repo1.maven.org/maven2/de/tu-dresden/inf/lat/gel/)
 * as dependency
 ```xml
 <dependency>
   <groupId>de.tu-dresden.inf.lat.gel</groupId>
   <artifactId>gel</artifactId>
-  <version>0.17.1</version>
+  <version>0.17.2</version>
 </dependency>
 ```
 
