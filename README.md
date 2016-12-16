@@ -1,6 +1,7 @@
 #  [Generalizations for the EL family](http://julianmendez.github.io/gel)
 
 [![Build Status](https://travis-ci.org/julianmendez/gel.png?branch=master)](https://travis-ci.org/julianmendez/gel)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.tu-dresden.inf.lat.gel/gel/badge.svg)](http://search.maven.org/#search|ga|1|g%3A%22de.tu-dresden.inf.lat.gel%22)
 
 This project implements generalization algorithms (role-depth bounded least common subsumer and most specific concept) for the description logics EL and extensions thereof.
 
