@@ -10,6 +10,7 @@ This project implements generalization algorithms (role-depth bounded least comm
 * [Protégé plug-in](https://sourceforge.net/projects/latitude/files/gel/0.17.2/de.tu-dresden.inf.lat.gel-0.17.2.jar/download)
 * [The Central Repository](https://repo1.maven.org/maven2/de/tu-dresden/inf/lat/gel/)
 * as dependency
+
 ```xml
 <dependency>
   <groupId>de.tu-dresden.inf.lat.gel</groupId>
@@ -29,6 +30,7 @@ Additional Developer: [Julian Mendez](http://lat.inf.tu-dresden.de/~mendez)
 ## Source code
 
 To checkout and compile the project, use:
+
 ```
 $ git clone https://github.com/julianmendez/gel.git
 $ cd gel
@@ -36,28 +38,36 @@ $ mvn clean install
 ```
 
 To compile the project offline, first download the dependencies:
+
 ```
 $ mvn dependency:go-offline
 ```
+
 and once offline, use:
+
 ```
 $ mvn --offline clean install
 ```
 
 The bundles uploaded to [Sonatype](https://oss.sonatype.org/) are created with:
+
 ```
 $ mvn clean install -DperformRelease=true
 ```
+
 and then:
+
 ```
 $ cd gel/target
 $ jar -cf bundle.jar gel-*
 ```
 
 The version number is updated with:
+
 ```
 $ mvn versions:set -DnewVersion=NEW_VERSION
 ```
+
 where *NEW_VERSION* is the new version.
 
 
