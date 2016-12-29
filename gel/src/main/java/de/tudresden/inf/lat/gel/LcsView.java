@@ -42,9 +42,9 @@ public class LcsView extends AbstractActiveOntologyViewComponent implements Acti
 	private Box inputBox;
 	
 	// the interface can have an arbitrary number of concepts - these list store the concepts and the text/check boxes
-	List<JCheckBox> inputCheckBoxes = new ArrayList<JCheckBox>();
-	List<JTextField> inputTextFields = new ArrayList<JTextField>();
-	List<OWLClassExpression> inputConcepts = new ArrayList<OWLClassExpression>();
+	List<JCheckBox> inputCheckBoxes = new ArrayList<>();
+	List<JTextField> inputTextFields = new ArrayList<>();
+	List<OWLClassExpression> inputConcepts = new ArrayList<>();
 	
 	/**
 	 * Creates a new text/check box for an additional input concept.
@@ -128,7 +128,7 @@ public class LcsView extends AbstractActiveOntologyViewComponent implements Acti
 		if ("lcs".equals(e.getActionCommand())) {
 			// button click - compute lsc
 			GelReasoner r = new GelReasoner(super.getOWLModelManager().getActiveOntology());
-			ArrayList<OWLClassExpression> concepts = new ArrayList<OWLClassExpression>();
+			ArrayList<OWLClassExpression> concepts = new ArrayList<>();
 			for (int i=0; i<inputConcepts.size(); i++) {
 				if (inputCheckBoxes.get(i).isSelected()) {
 					concepts.add(inputConcepts.get(i));

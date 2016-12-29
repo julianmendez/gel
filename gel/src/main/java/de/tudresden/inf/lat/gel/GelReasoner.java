@@ -97,7 +97,7 @@ public class GelReasoner {
 		Set<ComplexIntegerAxiom> axiomSet = translator.translateSA(ontology.getAxioms());
 
 		// get IDs of the newly introduced concept names
-		List<Integer> ids = new ArrayList<Integer>(concepts.length);
+		List<Integer> ids = new ArrayList<>(concepts.length);
 		for (OWLClass c : newNames) {
 			ids.add(translator.getTranslationRepository().getId(c));
 		}
@@ -187,7 +187,7 @@ public class GelReasoner {
 		if (exp instanceof IntegerClass) {
 			return rep.getOWLClass(((IntegerClass) exp).getId());
 		} else if (exp instanceof IntegerObjectIntersectionOf) {
-			Set<OWLClassExpression> classExpressions = new HashSet<OWLClassExpression>();
+			Set<OWLClassExpression> classExpressions = new HashSet<>();
 			for (IntegerClassExpression e : ((IntegerObjectIntersectionOf) exp).getOperands()) {
 				classExpressions.add(translateBack(owlFactory, rep, e));
 			}

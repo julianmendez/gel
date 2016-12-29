@@ -42,7 +42,7 @@ public class LcsAlgorithm extends Generalization {
 		// traverse all roles, if k is larger than 0
 		if (k > 0) {
 			// construct a set of all successors for each concept
-			List<List<Successor>> successors = new ArrayList<List<Successor>>(concepts.size());
+			List<List<Successor>> successors = new ArrayList<>(concepts.size());
 			for (int concept : concepts) {
 				successors.add(getSuccessors(concept));
 			}
@@ -54,7 +54,7 @@ public class LcsAlgorithm extends Generalization {
 
 					// recursively compute the lcs and add the resulting
 					// existential restriction to the conjunction set
-					List<Integer> newConcepts = new ArrayList<Integer>();
+					List<Integer> newConcepts = new ArrayList<>();
 					for (Successor s : successorTuple) {
 						newConcepts.add(s.getConcept());
 					}
@@ -88,14 +88,14 @@ public class LcsAlgorithm extends Generalization {
 	 */
 	private Set<Integer> findMinimalCommonRelations(List<Successor> successorTuple) {
 		// Find common subsumers of all relations
-		Set<Integer> commonRelations = new HashSet<Integer>(objectPropertyGraph.getSubsumers(successorTuple.get(0).getRole()));
+		Set<Integer> commonRelations = new HashSet<>(objectPropertyGraph.getSubsumers(successorTuple.get(0).getRole()));
 		for (int i = 1; i < successorTuple.size(); i++) {
 			commonRelations.retainAll(objectPropertyGraph.getSubsumers(successorTuple.get(i).getRole()));
 		}
 		commonRelations.remove(IntegerEntityManager.topObjectPropertyId);
 
 		// Extract minimal ones
-		Set<Integer> mininmalCommonRelations = new HashSet<Integer>(commonRelations);
+		Set<Integer> mininmalCommonRelations = new HashSet<>(commonRelations);
 		for (Integer r1 : commonRelations) {
 			if (!mininmalCommonRelations.contains(r1))
 				continue;
@@ -136,13 +136,13 @@ public class LcsAlgorithm extends Generalization {
 	 */
 	private Set<IntegerClassExpression> getCommonNames(List<Integer> concepts) {
 		// compute concept names that subsume all input concepts
-		Set<Integer> commonSubsumers = new HashSet<Integer>(classGraph.getSubsumers(concepts.get(0)));
+		Set<Integer> commonSubsumers = new HashSet<>(classGraph.getSubsumers(concepts.get(0)));
 		for (int i = 1; i < concepts.size(); i++) {
 			commonSubsumers.retainAll(classGraph.getSubsumers(concepts.get(i)));
 		}
 
 		// wrap all common names as owl classes
-		Set<IntegerClassExpression> commonNames = new HashSet<IntegerClassExpression>();
+		Set<IntegerClassExpression> commonNames = new HashSet<>();
 		for (Integer i : commonSubsumers) {
 			if (!entityManager.isAuxiliary(i)) {
 				commonNames.add(dataTypeFactory.createClass(i));
@@ -168,7 +168,7 @@ public class LcsAlgorithm extends Generalization {
 			this.successors = successors;
 			indices = new int[successors.size()];
 			lengths = new int[successors.size()];
-			result = new ArrayList<Successor>(successors.size());
+			result = new ArrayList<>(successors.size());
 			unmodifiableView = Collections.unmodifiableList(result);
 			for (int i = 0; i < successors.size(); i++) {
 				indices[i] = 0;

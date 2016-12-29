@@ -100,7 +100,7 @@ public class GelProcessor extends CelProcessor {
 	 *         relations to each role
 	 */
 	private Map<Integer, IntegerBinaryRelation> getRelationX() {
-		Map<Integer, IntegerBinaryRelation> m = new TreeMap<Integer, IntegerBinaryRelation>();
+		Map<Integer, IntegerBinaryRelation> m = new TreeMap<>();
 		for (Integer relation : super.getRelationIdSet()) {
 			if (super.getEntityManager().isAuxiliary(relation) || relation < IntegerEntityManager.firstUsableIdentifier)
 				continue;
@@ -121,8 +121,8 @@ public class GelProcessor extends CelProcessor {
 			Set<ComplexIntegerAxiom> ontology,
 			IntegerOntologyObjectFactory factory) {
 		
-		Set<Integer> originalClassSet = new HashSet<Integer>();
-		Set<Integer> originalObjectPropertySet = new HashSet<Integer>();
+		Set<Integer> originalClassSet = new HashSet<>();
+		Set<Integer> originalObjectPropertySet = new HashSet<>();
 
 		for (ComplexIntegerAxiom axiom : ontology) {
 			originalClassSet.addAll(axiom.getClassesInSignature());

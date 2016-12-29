@@ -48,7 +48,7 @@ public abstract class Generalization {
 	 */
 	protected List<Successor> getSuccessors(Integer concept) {
 		// compute all successors of the given concept
-		List<Successor> successors = new ArrayList<Successor>();
+		List<Successor> successors = new ArrayList<>();
 		for (Integer relation : relationGraph.keySet()) {
 			// check that the relation is not auxiliary or the top or bottom relation
 			if (entityManager.isAuxiliary(relation) || relation < IntegerEntityManager.firstUsableIdentifier) {
@@ -61,7 +61,7 @@ public abstract class Generalization {
 		}
 
 		// find the minimal successors in this set
-		List<Successor> minimalSuccessors = new ArrayList<Successor>(successors);
+		List<Successor> minimalSuccessors = new ArrayList<>(successors);
 		for (Successor s1 : successors) {
 			if (!minimalSuccessors.contains(s1)) continue;
 			for (Successor s2 : successors) {

@@ -16,7 +16,7 @@ public class MscAlgorithm extends Generalization {
 	 */
 	public IntegerClassExpression mostSpecificConcept(int element, int k) {
 		// get all concept names that the individual is part of
-		Set<IntegerClassExpression> conjunctionSet = new HashSet<IntegerClassExpression>();
+		Set<IntegerClassExpression> conjunctionSet = new HashSet<>();
 		for (Integer concept : classGraph.getSubsumers(element)) {
 			if (!entityManager.isAuxiliary(concept)) {
 				conjunctionSet.add(dataTypeFactory.createClass(concept));

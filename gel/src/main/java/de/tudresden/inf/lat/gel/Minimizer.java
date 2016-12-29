@@ -58,7 +58,7 @@ public class Minimizer {
 			// class expression is a conjunction - get all conjuncts (that
 			// should be either concept names or existential restrictions)
 			Set<IntegerClassExpression> exprs = ((IntegerObjectIntersectionOf) expression).getOperands();
-			Set<IntegerClassExpression> newExprs = new HashSet<IntegerClassExpression>(exprs);
+			Set<IntegerClassExpression> newExprs = new HashSet<>(exprs);
 
 			// remove all expressions that subsume other expressions
 			for (IntegerClassExpression e1 : exprs) {
@@ -72,7 +72,7 @@ public class Minimizer {
 			}
 
 			// minimize all remaining expressions individually
-			Set<IntegerClassExpression> newExprs2 = new HashSet<IntegerClassExpression>();
+			Set<IntegerClassExpression> newExprs2 = new HashSet<>();
 			for (IntegerClassExpression e : newExprs) {
 				newExprs2.add(minimize(e));
 			}
@@ -165,7 +165,7 @@ public class Minimizer {
 	}
 
 	private Collection<IntegerObjectSomeValuesFrom> findExistentialRestrictions(Integer property, IntegerClassExpression expression) {
-		Collection<IntegerObjectSomeValuesFrom> set = new ArrayList<IntegerObjectSomeValuesFrom>();
+		Collection<IntegerObjectSomeValuesFrom> set = new ArrayList<>();
 		if (expression instanceof IntegerObjectIntersectionOf) {
 			for (IntegerClassExpression sub : ((IntegerObjectIntersectionOf) expression).getOperands()) {
 				set.addAll(findExistentialRestrictions(property, sub));
