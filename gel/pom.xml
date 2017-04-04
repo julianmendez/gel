@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="https://maven.apache.org/POM/4.0.0" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<!-- Copyright (C) 2015 Julian Mendez -->
 
@@ -103,7 +103,7 @@
 							<Bundle-ContactAddress></Bundle-ContactAddress>
 							<Bundle-Description>Generalization algorithms for the description logics EL and extensions.</Bundle-Description>
 							<Bundle-Vendor>Chair of Automata Theory - TU Dresden</Bundle-Vendor>
-							<Bundle-DocURL>http://lat.inf.tu-dresden.de</Bundle-DocURL>
+							<Bundle-DocURL>https://lat.inf.tu-dresden.de</Bundle-DocURL>
 							<Bundle-ClassPath>${bundle.classpath}</Bundle-ClassPath>
 							<Import-Package>${import.package}</Import-Package>
 							<Include-Resource>
@@ -179,14 +179,14 @@
 
 		<license>
 			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 
 	</licenses>
 
 	<organization>
 		<name>Chair of Automata Theory - TU Dresden</name>
-		<url>http://lat.inf.tu-dresden.de</url>
+		<url>https://lat.inf.tu-dresden.de</url>
 	</organization>
 
 	<developers>

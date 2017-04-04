@@ -1,7 +1,7 @@
-#  [Generalizations for the EL family](http://julianmendez.github.io/gel)
+#  [Generalizations for the EL family](https://julianmendez.github.io/gel)
 
 [![Build Status](https://travis-ci.org/julianmendez/gel.png?branch=master)](https://travis-ci.org/julianmendez/gel)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.tu-dresden.inf.lat.gel/gel/badge.svg)](http://search.maven.org/#search|ga|1|g%3A%22de.tu-dresden.inf.lat.gel%22)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.tu-dresden.inf.lat.gel/gel/badge.svg)](https://search.maven.org/#search|ga|1|g%3A%22de.tu-dresden.inf.lat.gel%22)
 
 This project implements generalization algorithms (role-depth bounded least common subsumer and most specific concept) for the description logics EL and extensions thereof.
 
@@ -22,9 +22,9 @@ This project implements generalization algorithms (role-depth bounded least comm
 
 ## Developers
 
-Original Developer: [Andreas Ecke](http://lat.inf.tu-dresden.de/~ecke)
+Original Developer: [Andreas Ecke](https://lat.inf.tu-dresden.de/~ecke)
 
-Additional Developer: [Julian Mendez](http://lat.inf.tu-dresden.de/~mendez)
+Additional Developer: [Julian Mendez](https://lat.inf.tu-dresden.de/~mendez)
 
 
 ## Source code
@@ -73,17 +73,17 @@ where *NEW_VERSION* is the new version.
 
 ## License
 
-This software is distributed under the [Apache License Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.txt).
+This software is distributed under the [Apache License Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.txt).
 
 
 ## Release Notes
 
-See [release notes](http://github.com/julianmendez/gel/blob/master/RELEASE-NOTES.md).
+See [release notes](https://github.com/julianmendez/gel/blob/master/RELEASE-NOTES.md).
 
 
 ## Description
 
-The GEL plugin for [Protégé](http://protege.stanford.edu/) implements the **least common subsumer** and **most specific concept** inferences for EL-based ontologies in Protégé. The current version of these generalizations works with ELH ontologies and uses [jcel](https://github.com/julianmendez/jcel) as underlying classifier.
+The GEL plugin for [Protégé](https://protege.stanford.edu/) implements the **least common subsumer** and **most specific concept** inferences for EL-based ontologies in Protégé. The current version of these generalizations works with ELH ontologies and uses [jcel](https://github.com/julianmendez/jcel) as underlying classifier.
 
 
 ## Installation
