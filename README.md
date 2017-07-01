@@ -24,7 +24,7 @@ This project implements generalization algorithms (role-depth bounded least comm
 
 Original Developer: [Andreas Ecke](https://lat.inf.tu-dresden.de/~ecke)
 
-Additional Developer: [Julian Mendez](https://lat.inf.tu-dresden.de/~mendez)
+Additional Developer: [Julian Mendez](https://julianmendez.github.io)
 
 
 ## Source code
