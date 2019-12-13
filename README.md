@@ -6,6 +6,7 @@
 
 This project implements generalization algorithms (role-depth bounded least common subsumer and most specific concept) for the description logics EL and extensions thereof.
 
+
 ## Download
 
 * [Protégé plug-in](https://sourceforge.net/projects/latitude/files/gel/0.17.2/de.tu-dresden.inf.lat.gel-0.17.2.jar/download)
@@ -102,4 +103,5 @@ For the "Most Specific Concept" (msc), you have the same options (maximum role-d
 ## Contact
 
 In case you need more information, please contact @julianmendez .
+
 

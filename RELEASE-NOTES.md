@@ -1,4 +1,5 @@
 
+
 ## Release Notes
 
 | version | release date | Java | OWL API   | Protégé       | jcel   |
@@ -9,7 +10,6 @@
 | v0.17.0 | 2015-11-30   | 7    | 3.5.1     | 5.0.0-beta-17 | 0.22.0 |
 | v0.16.1 | 2013-10-30   | 6    | 3.2.4     | 4.1.0         | 0.16.0 |
 | v0.16.0 | 2012-03-06   | 6    | 3.2.4     | 4.1.0         | 0.16.0 |
-
 
 
 ### v0.17.3
@@ -83,4 +83,5 @@ $ cd de.tudresden.inf.lat.gel
 $ ant
 ```
 * plug-in: `de.tudresden.inf.lat.gel/dist/bundle/de.tudresden.inf.lat.gel.jar`
+
 
