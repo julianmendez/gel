@@ -1,6 +1,6 @@
 #  [Generalizations for the EL family](https://julianmendez.github.io/gel)
 
-[![build](https://travis-ci.org/julianmendez/gel.png?branch=master)](https://travis-ci.org/julianmendez/gel)
+[![build](https://github.com/julianmendez/gel/workflows/Java%20CI/badge.svg)](https://github.com/julianmendez/gel/actions)
 [![maven central](https://maven-badges.herokuapp.com/maven-central/de.tu-dresden.inf.lat.gel/gel/badge.svg)](https://search.maven.org/#search|ga|1|g%3A%22de.tu-dresden.inf.lat.gel%22)
 [![license](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0.txt)
 
