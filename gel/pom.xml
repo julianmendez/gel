@@ -104,11 +104,11 @@
 							<Import-Package>${import.package}</Import-Package>
 							<Include-Resource>
 								{maven-resources}, {maven-dependencies},
-								@jcel-coreontology-0.24.0.jar,
-								@jcel-core-0.24.0.jar,
-								@jcel-ontology-0.24.0.jar,
-								@jcel-reasoner-0.24.0.jar,
-								@jcel-owlapi-0.24.0.jar
+								@jcel-coreontology-${jcel.version}.jar,
+								@jcel-core-${jcel.version}.jar,
+								@jcel-ontology-${jcel.version}.jar,
+								@jcel-reasoner-${jcel.version}.jar,
+								@jcel-owlapi-${jcel.version}.jar
 							</Include-Resource>
 							<Require-Bundle>${require.bundle}</Require-Bundle>
 						</instructions>
