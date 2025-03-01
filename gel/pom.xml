@@ -46,21 +46,65 @@
 	</parent>
 
 	<properties>
+
 		<maven.compiler.source>1.8</maven.compiler.source>
+
 		<maven.compiler.target>1.8</maven.compiler.target>
 
-        <jcel.version>0.24.1</jcel.version>
-        <owlapi.version>5.5.1</owlapi.version>
-        <protege.version>5.6.5</protege.version>
+		<jcel.version>0.24.1</jcel.version>
+
+		<owlapi.version>5.5.1</owlapi.version>
+
+		<protege.version>5.6.5</protege.version>
+
+		<guava.package>com.google.common.base;version="[18,33)"</guava.package>
+
+		<bundle.activator>org.protege.editor.core.plugin.DefaultPluginActivator</bundle.activator>
 
 		<bundle.classpath>.</bundle.classpath>
-		<bundle.activator>org.protege.editor.core.plugin.DefaultPluginActivator</bundle.activator>
-		<import.package>javax.accessibility,javax.swing,javax.swing.border,org.osgi.framework,org.protege.editor.core.plugin,org.protege.editor.core.ui.workspace,*</import.package>
-		<require.bundle>org.eclipse.equinox.registry,org.eclipse.equinox.common,org.protege.editor.core.application,org.protege.editor.owl,org.semanticweb.owl.owlapi</require.bundle>
+
+		<import.package>
+			org.protege.editor.core.plugin,
+			org.w3c.dom,
+			org.xml.sax,
+			${guava.package},
+			javax.swing,
+			javax.swing.border,
+			javax.imageio,
+			javax.xml.datatype,
+			javax.xml.namespace,
+			javax.xml.parsers,
+			javax.xml.transform,
+			javax.xml.transform.dom,
+			javax.xml.transform.stream,
+			javax.accessibility,
+			org.osgi.framework
+		</import.package>
+
+		<require.bundle>
+			org.eclipse.equinox.registry,
+			org.eclipse.equinox.common,
+			org.protege.editor.core.application,
+			org.protege.editor.owl,
+			org.semanticweb.owl.owlapi
+		</require.bundle>
+
+		<include.resource>
+			{maven-resources}, {maven-dependencies},
+			@jcel-coreontology-${jcel.version}.jar,
+			@jcel-core-${jcel.version}.jar,
+			@jcel-ontology-${jcel.version}.jar,
+			@jcel-reasoner-${jcel.version}.jar,
+			@jcel-owlapi-${jcel.version}.jar,
+			LICENSE.txt=../docs/LICENSE.txt
+		</include.resource>
+
 	</properties>
 
 	<build>
+
 		<pluginManagement>
+
 			<plugins>
 
 				<plugin>
@@ -105,23 +149,17 @@
 							<Bundle-ContactAddress></Bundle-ContactAddress>
 							<Bundle-Description>Generalization algorithms for the description logics EL and extensions.</Bundle-Description>
 							<Bundle-Vendor>Chair of Automata Theory - TU Dresden</Bundle-Vendor>
-							<Bundle-DocURL>https://lat.inf.tu-dresden.de</Bundle-DocURL>
+							<Bundle-DocURL>https://tu-dresden.de/ing/informatik/thi/lat</Bundle-DocURL>
 							<Bundle-ClassPath>${bundle.classpath}</Bundle-ClassPath>
 							<Import-Package>${import.package}</Import-Package>
-							<Include-Resource>
-								{maven-resources}, {maven-dependencies},
-								@jcel-coreontology-${jcel.version}.jar,
-								@jcel-core-${jcel.version}.jar,
-								@jcel-ontology-${jcel.version}.jar,
-								@jcel-reasoner-${jcel.version}.jar,
-								@jcel-owlapi-${jcel.version}.jar
-							</Include-Resource>
 							<Require-Bundle>${require.bundle}</Require-Bundle>
+							<Include-Resource>${include.resource}</Include-Resource>
 						</instructions>
 					</configuration>
 				</plugin>
 
 			</plugins>
+
 		</pluginManagement>
 
 		<plugins>
@@ -167,6 +205,7 @@
 			</plugin>
 
 		</plugins>
+
 	</build>
 
 	<name>Generalizations for the EL family</name>
